@@ -34,7 +34,7 @@ fun App(
                 AppState.Empty
             } else {
                 val currentIdx = branches.indexOfFirst { it.current }.takeIf { it >= 0 } ?: 0
-                AppState.Ready(branches, selected = currentIdx, pageStart = 0)
+                AppState.Ready(branches, selectedItemIndex = currentIdx, pageStartIndex = 0)
             }
         } catch (e: GitError) {
             AppState.Failed(e.message ?: "unknown git error")
@@ -55,13 +55,10 @@ fun App(
         }
     }
 
-    val isTerminal = state is AppState.Switched ||
-        state is AppState.Failed ||
-        state is AppState.Cancelled ||
-        state is AppState.Empty
-
     SideEffect {
-        if (isTerminal) onExit(state)
+        if (state.isTerminalState()) {
+            onExit(state)
+        }
     }
 
     val keyModifier = if (state is AppState.Ready) {
@@ -79,7 +76,7 @@ fun App(
                 }
 
                 KeyEvent("Enter") -> {
-                    state = AppState.Switching(ready.branches[ready.selected].name)
+                    state = AppState.Switching(ready.branches[ready.selectedItemIndex].name)
                     true
                 }
 
@@ -103,8 +100,8 @@ fun App(
 
             is AppState.Ready -> {
                 Text("mybranches — ↑↓ navigate  enter select  q quit")
-                val visiblePageStart = visiblePageStart(s.selected, s.pageStart, pageSize)
-                BranchList(s.branches, s.selected, visiblePageStart, pageSize)
+                val visiblePageStart = visiblePageStart(s.selectedItemIndex, s.pageStartIndex, pageSize)
+                BranchList(s.branches, s.selectedItemIndex, visiblePageStart, pageSize)
             }
 
             is AppState.Switching -> Text("Switching to ${s.target}...")
@@ -113,7 +110,7 @@ fun App(
         }
     }
 
-    if (!isTerminal) {
+    if (!state.isTerminalState()) {
         LaunchedEffect(Unit) { awaitCancellation() }
     }
 }

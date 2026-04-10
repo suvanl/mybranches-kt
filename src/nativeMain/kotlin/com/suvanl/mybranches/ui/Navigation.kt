@@ -1,25 +1,38 @@
 package com.suvanl.mybranches.ui
 
-/** Ensures the selected item is always within the visible page. */
+/**
+ * Ensures the selected item is always within the visible page.
+ */
 internal fun visiblePageStart(
-    selected: Int,
-    pageStart: Int,
+    selectedIndex: Int,
+    pageStartIndex: Int,
     pageSize: Int,
 ): Int = when {
-    selected < pageStart -> selected
-    selected >= pageStart + pageSize -> selected - pageSize + 1
-    else -> pageStart
+    selectedIndex < pageStartIndex -> selectedIndex
+    selectedIndex >= pageStartIndex + pageSize -> selectedIndex - pageSize + 1
+    else -> pageStartIndex
 }.coerceAtLeast(0)
 
 internal fun AppState.Ready.moveUp(): AppState.Ready {
-    val newSelected = (selected - 1).coerceAtLeast(0)
-    val newPageStart = if (newSelected < pageStart) newSelected else pageStart
-    return copy(selected = newSelected, pageStart = newPageStart)
+    val newSelected = (selectedItemIndex - 1).coerceAtLeast(0)
+    val newPageStart = if (newSelected < pageStartIndex) {
+        newSelected
+    } else {
+        pageStartIndex
+    }
+    return copy(selectedItemIndex = newSelected, pageStartIndex = newPageStart)
 }
 
-internal fun AppState.Ready.moveDown(pageSize: Int): AppState.Ready {
-    val newSelected = (selected + 1).coerceAtMost(branches.size - 1)
-    val pageEnd = pageStart + pageSize
-    val newPageStart = if (newSelected >= pageEnd) pageStart + 1 else pageStart
-    return copy(selected = newSelected, pageStart = newPageStart)
+/**
+ * @param currentPageSize Number of currently visible rows in the terminal window
+ */
+internal fun AppState.Ready.moveDown(currentPageSize: Int): AppState.Ready {
+    val newSelected = (selectedItemIndex + 1).coerceAtMost(branches.size - 1)
+    val pageEnd = pageStartIndex + currentPageSize
+    val newPageStart = if (newSelected >= pageEnd) {
+        pageStartIndex + 1
+    } else {
+        pageStartIndex
+    }
+    return copy(selectedItemIndex = newSelected, pageStartIndex = newPageStart)
 }

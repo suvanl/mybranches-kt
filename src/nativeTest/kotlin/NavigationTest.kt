@@ -11,7 +11,7 @@ class NavigationTest {
     @Test
     fun shouldNotChangePageStartWhenSelectedIsInWindow() {
         // Given / When
-        val result = visiblePageStart(selected = 3, pageStart = 0, pageSize = 10)
+        val result = visiblePageStart(selectedIndex = 3, pageStartIndex = 0, pageSize = 10)
 
         // Then
         result shouldBe 0
@@ -20,7 +20,7 @@ class NavigationTest {
     @Test
     fun shouldSnapPageStartToSelectedWhenAboveWindow() {
         // Given / When
-        val result = visiblePageStart(selected = 2, pageStart = 5, pageSize = 10)
+        val result = visiblePageStart(selectedIndex = 2, pageStartIndex = 5, pageSize = 10)
 
         // Then
         result shouldBe 2
@@ -29,7 +29,7 @@ class NavigationTest {
     @Test
     fun shouldSnapSelectedToBottomOfWindowWhenBelowWindow() {
         // Given / When
-        val result = visiblePageStart(selected = 15, pageStart = 0, pageSize = 10)
+        val result = visiblePageStart(selectedIndex = 15, pageStartIndex = 0, pageSize = 10)
 
         // Then
         result shouldBe 6
@@ -38,7 +38,7 @@ class NavigationTest {
     @Test
     fun shouldNeverReturnNegativePageStart() {
         // Given / When
-        val result = visiblePageStart(selected = 0, pageStart = 0, pageSize = 10)
+        val result = visiblePageStart(selectedIndex = 0, pageStartIndex = 0, pageSize = 10)
 
         // Then
         result shouldBe 0
@@ -47,102 +47,107 @@ class NavigationTest {
     @Test
     fun shouldDecrementSelectedWhenMovingUpFromMiddle() {
         // Given
-        val state = AppState.Ready(branches(10), selected = 5, pageStart = 0)
+        val state = AppState.Ready(branches = givenBranches(10), selectedItemIndex = 5, pageStartIndex = 0)
 
         // When
         val next = state.moveUp()
 
         // Then
-        next.selected shouldBe 4
+        next.selectedItemIndex shouldBe 4
     }
 
     @Test
     fun shouldNotDecrementSelectedBelowZeroWhenAtTop() {
         // Given
-        val state = AppState.Ready(branches(10), selected = 0, pageStart = 0)
+        val state = AppState.Ready(branches = givenBranches(10), selectedItemIndex = 0, pageStartIndex = 0)
 
         // When
         val next = state.moveUp()
 
         // Then
-        next.selected shouldBe 0
+        next.selectedItemIndex shouldBe 0
     }
 
     @Test
     fun shouldScrollPageStartWhenMovingUpFromTopOfPage() {
         // Given
-        val state = AppState.Ready(branches(20), selected = 5, pageStart = 5)
+        val state = AppState.Ready(branches = givenBranches(20), selectedItemIndex = 5, pageStartIndex = 5)
 
         // When
         val next = state.moveUp()
 
         // Then
-        next.selected shouldBe 4
-        next.pageStart shouldBe 4
+        next.selectedItemIndex shouldBe 4
+        next.pageStartIndex shouldBe 4
     }
 
     @Test
     fun shouldNotScrollPageStartWhenMovingUpWithinPage() {
         // Given
-        val state = AppState.Ready(branches(20), selected = 6, pageStart = 5)
+        val state = AppState.Ready(branches = givenBranches(20), selectedItemIndex = 6, pageStartIndex = 5)
 
         // When
         val next = state.moveUp()
 
         // Then
-        next.selected shouldBe 5
-        next.pageStart shouldBe 5
+        next.selectedItemIndex shouldBe 5
+        next.pageStartIndex shouldBe 5
     }
 
     @Test
     fun shouldIncrementSelectedWhenMovingDownFromMiddle() {
         // Given
-        val state = AppState.Ready(branches(10), selected = 3, pageStart = 0)
+        val state = AppState.Ready(branches = givenBranches(10), selectedItemIndex = 3, pageStartIndex = 0)
 
         // When
-        val next = state.moveDown(pageSize = 10)
+        val next = state.moveDown(currentPageSize = 10)
 
         // Then
-        next.selected shouldBe 4
+        next.selectedItemIndex shouldBe 4
     }
 
     @Test
     fun shouldNotIncrementSelectedPastLastItemWhenAtBottom() {
         // Given
-        val state = AppState.Ready(branches(5), selected = 4, pageStart = 0)
+        val state = AppState.Ready(branches = givenBranches(5), selectedItemIndex = 4, pageStartIndex = 0)
 
         // When
-        val next = state.moveDown(pageSize = 10)
+        val next = state.moveDown(currentPageSize = 10)
 
         // Then
-        next.selected shouldBe 4
+        next.selectedItemIndex shouldBe 4
     }
 
     @Test
     fun shouldScrollPageStartWhenMovingDownFromBottomOfPage() {
         // Given
-        val state = AppState.Ready(branches(20), selected = 9, pageStart = 0)
+        val state = AppState.Ready(branches = givenBranches(20), selectedItemIndex = 9, pageStartIndex = 0)
 
         // When
-        val next = state.moveDown(pageSize = 10)
+        val next = state.moveDown(currentPageSize = 10)
 
         // Then
-        next.selected shouldBe 10
-        next.pageStart shouldBe 1
+        next.selectedItemIndex shouldBe 10
+        next.pageStartIndex shouldBe 1
     }
 
     @Test
     fun shouldNotScrollPageStartWhenMovingDownWithinPage() {
         // Given
-        val state = AppState.Ready(branches(20), selected = 5, pageStart = 0)
+        val state = AppState.Ready(branches = givenBranches(20), selectedItemIndex = 5, pageStartIndex = 0)
 
         // When
-        val next = state.moveDown(pageSize = 10)
+        val next = state.moveDown(currentPageSize = 10)
 
         // Then
-        next.selected shouldBe 6
-        next.pageStart shouldBe 0
+        next.selectedItemIndex shouldBe 6
+        next.pageStartIndex shouldBe 0
     }
 
-    private fun branches(n: Int) = List(n) { Branch("user/branch-$it", current = it == 0) }
+    private fun givenBranches(n: Int) = List(n) {
+        Branch(
+            name = "user/branch-$it",
+            current = it == 0,
+        )
+    }
 }
