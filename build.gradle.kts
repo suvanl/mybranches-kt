@@ -26,9 +26,6 @@ kotlin {
             dependencies {
                 implementation("com.jakewharton.mosaic:mosaic-runtime:0.18.0")
             }
-            languageSettings {
-                optIn("kotlinx.cinterop.ExperimentalForeignApi")
-            }
         }
         nativeTest {
             dependencies {
