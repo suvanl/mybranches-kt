@@ -27,7 +27,7 @@ class RealGitClient : GitClient {
             .map { line ->
                 val current = line.startsWith("*")
                 val name = line.removePrefix("*").removePrefix(" ").trim()
-                Branch(name = name, current = current)
+                Branch(name = name, isCurrent = current)
             }
     }
 
