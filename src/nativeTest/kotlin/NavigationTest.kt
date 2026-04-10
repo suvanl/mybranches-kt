@@ -3,92 +3,146 @@ import com.suvanl.mybranches.ui.AppState
 import com.suvanl.mybranches.ui.moveDown
 import com.suvanl.mybranches.ui.moveUp
 import com.suvanl.mybranches.ui.visiblePageStart
+import io.kotest.matchers.shouldBe
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class NavigationTest {
 
-    private fun branches(n: Int) = List(n) { Branch("user/branch-$it", current = it == 0) }
-
-    // visiblePageStart
-
     @Test
-    fun visiblePageStart_selectedInWindow_unchanged() {
-        assertEquals(0, visiblePageStart(selected = 3, pageStart = 0, pageSize = 10))
+    fun shouldNotChangePageStartWhenSelectedIsInWindow() {
+        // Given / When
+        val result = visiblePageStart(selected = 3, pageStart = 0, pageSize = 10)
+
+        // Then
+        result shouldBe 0
     }
 
     @Test
-    fun visiblePageStart_selectedAboveWindow_snapsToSelected() {
-        assertEquals(2, visiblePageStart(selected = 2, pageStart = 5, pageSize = 10))
+    fun shouldSnapPageStartToSelectedWhenAboveWindow() {
+        // Given / When
+        val result = visiblePageStart(selected = 2, pageStart = 5, pageSize = 10)
+
+        // Then
+        result shouldBe 2
     }
 
     @Test
-    fun visiblePageStart_selectedBelowWindow_snapsSelectedToBottom() {
-        assertEquals(6, visiblePageStart(selected = 15, pageStart = 0, pageSize = 10))
+    fun shouldSnapSelectedToBottomOfWindowWhenBelowWindow() {
+        // Given / When
+        val result = visiblePageStart(selected = 15, pageStart = 0, pageSize = 10)
+
+        // Then
+        result shouldBe 6
     }
 
     @Test
-    fun visiblePageStart_neverNegative() {
-        assertEquals(0, visiblePageStart(selected = 0, pageStart = 0, pageSize = 10))
+    fun shouldNeverReturnNegativePageStart() {
+        // Given / When
+        val result = visiblePageStart(selected = 0, pageStart = 0, pageSize = 10)
+
+        // Then
+        result shouldBe 0
     }
 
-    // moveUp
-
     @Test
-    fun moveUp_fromMiddle_decrementsSelected() {
+    fun shouldDecrementSelectedWhenMovingUpFromMiddle() {
+        // Given
         val state = AppState.Ready(branches(10), selected = 5, pageStart = 0)
-        assertEquals(4, state.moveUp().selected)
+
+        // When
+        val next = state.moveUp()
+
+        // Then
+        next.selected shouldBe 4
     }
 
     @Test
-    fun moveUp_atTop_staysAt0() {
+    fun shouldNotDecrementSelectedBelowZeroWhenAtTop() {
+        // Given
         val state = AppState.Ready(branches(10), selected = 0, pageStart = 0)
-        assertEquals(0, state.moveUp().selected)
+
+        // When
+        val next = state.moveUp()
+
+        // Then
+        next.selected shouldBe 0
     }
 
     @Test
-    fun moveUp_atTopOfPage_scrollsPageStart() {
+    fun shouldScrollPageStartWhenMovingUpFromTopOfPage() {
+        // Given
         val state = AppState.Ready(branches(20), selected = 5, pageStart = 5)
+
+        // When
         val next = state.moveUp()
-        assertEquals(4, next.selected)
-        assertEquals(4, next.pageStart)
+
+        // Then
+        next.selected shouldBe 4
+        next.pageStart shouldBe 4
     }
 
     @Test
-    fun moveUp_withinPage_doesNotScrollPageStart() {
+    fun shouldNotScrollPageStartWhenMovingUpWithinPage() {
+        // Given
         val state = AppState.Ready(branches(20), selected = 6, pageStart = 5)
+
+        // When
         val next = state.moveUp()
-        assertEquals(5, next.selected)
-        assertEquals(5, next.pageStart)
+
+        // Then
+        next.selected shouldBe 5
+        next.pageStart shouldBe 5
     }
 
-    // moveDown
-
     @Test
-    fun moveDown_fromMiddle_incrementsSelected() {
+    fun shouldIncrementSelectedWhenMovingDownFromMiddle() {
+        // Given
         val state = AppState.Ready(branches(10), selected = 3, pageStart = 0)
-        assertEquals(4, state.moveDown(pageSize = 10).selected)
+
+        // When
+        val next = state.moveDown(pageSize = 10)
+
+        // Then
+        next.selected shouldBe 4
     }
 
     @Test
-    fun moveDown_atBottom_staysAtLast() {
+    fun shouldNotIncrementSelectedPastLastItemWhenAtBottom() {
+        // Given
         val state = AppState.Ready(branches(5), selected = 4, pageStart = 0)
-        assertEquals(4, state.moveDown(pageSize = 10).selected)
+
+        // When
+        val next = state.moveDown(pageSize = 10)
+
+        // Then
+        next.selected shouldBe 4
     }
 
     @Test
-    fun moveDown_atBottomOfPage_scrollsPageStart() {
+    fun shouldScrollPageStartWhenMovingDownFromBottomOfPage() {
+        // Given
         val state = AppState.Ready(branches(20), selected = 9, pageStart = 0)
+
+        // When
         val next = state.moveDown(pageSize = 10)
-        assertEquals(10, next.selected)
-        assertEquals(1, next.pageStart)
+
+        // Then
+        next.selected shouldBe 10
+        next.pageStart shouldBe 1
     }
 
     @Test
-    fun moveDown_withinPage_doesNotScrollPageStart() {
+    fun shouldNotScrollPageStartWhenMovingDownWithinPage() {
+        // Given
         val state = AppState.Ready(branches(20), selected = 5, pageStart = 0)
+
+        // When
         val next = state.moveDown(pageSize = 10)
-        assertEquals(6, next.selected)
-        assertEquals(0, next.pageStart)
+
+        // Then
+        next.selected shouldBe 6
+        next.pageStart shouldBe 0
     }
+
+    private fun branches(n: Int) = List(n) { Branch("user/branch-$it", current = it == 0) }
 }
