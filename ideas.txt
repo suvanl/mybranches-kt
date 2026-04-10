@@ -7,3 +7,5 @@ future ideas/enhancements:
 - allow the user to provide a custom username and/or branch name pattern
 
 - option to include main/master branch in the list
+
+- custom branch list sort order (e.g. alphabetical instead of by committer date)

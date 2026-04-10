@@ -17,7 +17,7 @@ fun main() {
     runMosaicMain {
         App(
             gitClient = RealGitClient(),
-            username = username,
+            branchNamePattern = "$username/*",
             onExit = { finalState = it },
         )
     }
