@@ -33,8 +33,8 @@ fun App(
             if (branches.isEmpty()) {
                 AppState.Empty
             } else {
-                val currentIdx = branches.indexOfFirst { it.current }.takeIf { it >= 0 } ?: 0
-                AppState.Ready(branches, selectedItemIndex = currentIdx, pageStartIndex = 0)
+                val currentIndex = branches.indexOfFirst { it.current }.takeIf { it >= 0 } ?: 0
+                AppState.Ready(branches, selectedItemIndex = currentIndex, pageStartIndex = 0)
             }
         } catch (e: GitError) {
             AppState.Failed(e.message ?: "unknown git error")
