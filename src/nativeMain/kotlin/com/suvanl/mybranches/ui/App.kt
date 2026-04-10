@@ -94,7 +94,7 @@ fun App(
         when (val s = state) {
             AppState.Loading -> Text("Loading...")
 
-            AppState.Empty -> Text("No branches matching '$branchNamePattern/*'")
+            AppState.Empty -> Text("No branches matching '$branchNamePattern'")
 
             is AppState.Ready -> {
                 Text("mybranches — ↑↓ navigate | enter select | q quit")
