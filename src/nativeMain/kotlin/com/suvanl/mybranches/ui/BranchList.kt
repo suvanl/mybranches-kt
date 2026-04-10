@@ -19,7 +19,7 @@ fun BranchList(
         for ((offset, branch) in visibleBranches.withIndex()) {
             val index = pageStart + offset
             val cursor = if (index == selected) ">" else " "
-            val currentMarker = if (branch.current) "* " else "  "
+            val currentMarker = if (branch.isCurrent) "* " else "  "
             Text("$cursor $currentMarker${branch.name}")
         }
 

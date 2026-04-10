@@ -147,7 +147,7 @@ class NavigationTest {
     private fun givenBranches(n: Int) = List(n) {
         Branch(
             name = "user/branch-$it",
-            current = it == 0,
+            isCurrent = it == 0,
         )
     }
 }

@@ -33,7 +33,7 @@ fun App(
             if (branches.isEmpty()) {
                 AppState.Empty
             } else {
-                val currentIndex = branches.indexOfFirst { it.current }.takeIf { it >= 0 } ?: 0
+                val currentIndex = branches.indexOfFirst { it.isCurrent }.takeIf { it >= 0 } ?: 0
                 AppState.Ready(branches, selectedItemIndex = currentIndex, pageStartIndex = 0)
             }
         } catch (e: GitError) {
