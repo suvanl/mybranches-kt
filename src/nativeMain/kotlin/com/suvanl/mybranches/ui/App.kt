@@ -22,6 +22,7 @@ fun App(
     gitClient: GitClient,
     username: String,
     onExit: (AppState) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var state by remember { mutableStateOf<AppState>(AppState.Loading) }
     val terminalRows = LocalTerminalState.current.size.rows
@@ -61,45 +62,42 @@ fun App(
         }
     }
 
-    val keyModifier = if (state is AppState.Ready) {
-        Modifier.onKeyEvent { event ->
-            val ready = state as? AppState.Ready ?: return@onKeyEvent false
-            when (event) {
-                KeyEvent("ArrowUp") -> {
-                    state = ready.moveUp()
-                    true
+    Column(
+        modifier = modifier
+            .onKeyEvent { event ->
+                val ready = state as? AppState.Ready ?: return@onKeyEvent false
+                when (event) {
+                    KeyEvent("ArrowUp") -> {
+                        state = ready.moveUp()
+                        true
+                    }
+
+                    KeyEvent("ArrowDown") -> {
+                        state = ready.moveDown(pageSize)
+                        true
+                    }
+
+                    KeyEvent("Enter") -> {
+                        state = AppState.Switching(ready.branches[ready.selectedItemIndex].name)
+                        true
+                    }
+
+                    KeyEvent("q"), KeyEvent("Escape") -> {
+                        state = AppState.Cancelled
+                        true
+                    }
+
+                    else -> false
                 }
-
-                KeyEvent("ArrowDown") -> {
-                    state = ready.moveDown(pageSize)
-                    true
-                }
-
-                KeyEvent("Enter") -> {
-                    state = AppState.Switching(ready.branches[ready.selectedItemIndex].name)
-                    true
-                }
-
-                KeyEvent("q"), KeyEvent("Escape") -> {
-                    state = AppState.Cancelled
-                    true
-                }
-
-                else -> false
-            }
-        }
-    } else {
-        Modifier
-    }
-
-    Column(modifier = keyModifier) {
+            },
+    ) {
         when (val s = state) {
             AppState.Loading -> Text("Loading...")
 
             AppState.Empty -> Text("No branches matching '$username/*'")
 
             is AppState.Ready -> {
-                Text("mybranches — ↑↓ navigate  enter select  q quit")
+                Text("mybranches — ↑↓ navigate | enter select | q quit")
                 val visiblePageStart = visiblePageStart(s.selectedItemIndex, s.pageStartIndex, pageSize)
                 BranchList(s.branches, s.selectedItemIndex, visiblePageStart, pageSize)
             }
