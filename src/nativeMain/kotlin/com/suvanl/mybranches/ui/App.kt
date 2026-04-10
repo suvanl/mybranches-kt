@@ -20,7 +20,7 @@ import kotlinx.coroutines.awaitCancellation
 @Composable
 fun App(
     gitClient: GitClient,
-    username: String,
+    branchNamePattern: String,
     onExit: (AppState) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -30,7 +30,7 @@ fun App(
 
     LaunchedEffect(Unit) {
         state = try {
-            val branches = gitClient.listBranches(username)
+            val branches = gitClient.listBranches(branchNamePattern)
             if (branches.isEmpty()) {
                 AppState.Empty
             } else {
@@ -94,7 +94,7 @@ fun App(
         when (val s = state) {
             AppState.Loading -> Text("Loading...")
 
-            AppState.Empty -> Text("No branches matching '$username/*'")
+            AppState.Empty -> Text("No branches matching '$branchNamePattern'")
 
             is AppState.Ready -> {
                 Text("mybranches — ↑↓ navigate | enter select | q quit")

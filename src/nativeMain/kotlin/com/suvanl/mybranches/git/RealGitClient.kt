@@ -5,12 +5,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class RealGitClient : GitClient {
-    override suspend fun listBranches(prefix: String): List<Branch> = withContext(Dispatchers.Default) {
+    override suspend fun listBranches(pattern: String): List<Branch> = withContext(Dispatchers.Default) {
         val result = runCommand(
             "git",
             "branch",
             "--list",
-            "$prefix/*",
+            pattern,
             "--sort=-committerdate",
             "--format=%(HEAD)%(refname:short)",
         )

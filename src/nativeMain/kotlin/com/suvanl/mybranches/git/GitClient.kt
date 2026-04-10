@@ -7,9 +7,9 @@ data class Branch(
 
 interface GitClient {
     /**
-     * Returns local branches matching "prefix/WILDCARD", sorted by most recent commit first
+     * Returns local branches matching [pattern], sorted by most recent commit first
      */
-    suspend fun listBranches(prefix: String): List<Branch>
+    suspend fun listBranches(pattern: String): List<Branch>
 
     /**
      * @throws GitError on failure
