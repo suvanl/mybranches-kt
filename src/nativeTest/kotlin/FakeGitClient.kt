@@ -1,6 +1,6 @@
-import git.Branch
-import git.GitClient
-import git.GitError
+import com.suvanl.mybranches.git.Branch
+import com.suvanl.mybranches.git.GitClient
+import com.suvanl.mybranches.git.GitError
 
 class FakeGitClient(
     private val branches: List<Branch> = emptyList(),

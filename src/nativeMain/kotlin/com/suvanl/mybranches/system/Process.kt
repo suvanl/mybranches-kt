@@ -1,8 +1,9 @@
-@file:OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
+@file:OptIn(ExperimentalForeignApi::class)
 
-package system
+package com.suvanl.mybranches.system
 
 import kotlinx.cinterop.ByteVar
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.allocArray
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.toKString
@@ -10,7 +11,10 @@ import platform.posix.fgets
 import platform.posix.pclose
 import platform.posix.popen
 
-data class CommandResult(val output: String, val succeeded: Boolean)
+data class CommandResult(
+    val output: String,
+    val succeeded: Boolean,
+)
 
 fun runCommand(vararg args: String): CommandResult {
     val escaped = args.joinToString(" ") { arg ->

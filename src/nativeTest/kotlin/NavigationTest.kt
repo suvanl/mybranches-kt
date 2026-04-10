@@ -1,8 +1,8 @@
-import git.Branch
-import ui.AppState
-import ui.moveDown
-import ui.moveUp
-import ui.visiblePageStart
+import com.suvanl.mybranches.git.Branch
+import com.suvanl.mybranches.ui.AppState
+import com.suvanl.mybranches.ui.moveDown
+import com.suvanl.mybranches.ui.moveUp
+import com.suvanl.mybranches.ui.visiblePageStart
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

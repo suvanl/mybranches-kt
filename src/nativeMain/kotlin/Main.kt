@@ -1,8 +1,8 @@
 import com.jakewharton.mosaic.runMosaicMain
-import git.RealGitClient
-import system.currentUsername
-import ui.App
-import ui.AppState
+import com.suvanl.mybranches.git.RealGitClient
+import com.suvanl.mybranches.system.currentUsername
+import com.suvanl.mybranches.ui.App
+import com.suvanl.mybranches.ui.AppState
 import kotlin.system.exitProcess
 
 fun main() {
@@ -27,6 +27,7 @@ fun main() {
             println("mb: ${s.message}")
             exitProcess(1)
         }
+
         else -> {}
     }
 }

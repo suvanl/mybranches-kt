@@ -1,4 +1,4 @@
-# mybranches.kt
+# mybranches-kt
 
 ## Build and run the project
 

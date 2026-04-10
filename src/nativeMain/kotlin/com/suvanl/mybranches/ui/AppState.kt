@@ -1,6 +1,6 @@
-package ui
+package com.suvanl.mybranches.ui
 
-import git.Branch
+import com.suvanl.mybranches.git.Branch
 
 sealed interface AppState {
     data object Loading : AppState

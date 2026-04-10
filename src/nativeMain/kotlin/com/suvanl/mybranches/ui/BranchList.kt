@@ -1,9 +1,9 @@
-package ui
+package com.suvanl.mybranches.ui
 
 import androidx.compose.runtime.Composable
 import com.jakewharton.mosaic.ui.Column
 import com.jakewharton.mosaic.ui.Text
-import git.Branch
+import com.suvanl.mybranches.git.Branch
 
 @Composable
 fun BranchList(

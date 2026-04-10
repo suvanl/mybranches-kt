@@ -1,14 +1,16 @@
-package git
+package com.suvanl.mybranches.git
 
+import com.suvanl.mybranches.system.runCommand
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import system.runCommand
 
 class RealGitClient : GitClient {
     override suspend fun listBranches(prefix: String): List<Branch> = withContext(Dispatchers.Default) {
         val result = runCommand(
-            "git", "branch",
-            "--list", "$prefix/*",
+            "git",
+            "branch",
+            "--list",
+            "$prefix/*",
             "--sort=-committerdate",
             "--format=%(HEAD)%(refname:short)",
         )

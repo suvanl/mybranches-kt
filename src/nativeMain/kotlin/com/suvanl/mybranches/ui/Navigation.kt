@@ -1,7 +1,11 @@
-package ui
+package com.suvanl.mybranches.ui
 
 /** Ensures the selected item is always within the visible page. */
-internal fun visiblePageStart(selected: Int, pageStart: Int, pageSize: Int): Int = when {
+internal fun visiblePageStart(
+    selected: Int,
+    pageStart: Int,
+    pageSize: Int,
+): Int = when {
     selected < pageStart -> selected
     selected >= pageStart + pageSize -> selected - pageSize + 1
     else -> pageStart

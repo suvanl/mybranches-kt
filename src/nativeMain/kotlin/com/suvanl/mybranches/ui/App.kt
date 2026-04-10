@@ -1,4 +1,4 @@
-package ui
+package com.suvanl.mybranches.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,8 +13,8 @@ import com.jakewharton.mosaic.layout.onKeyEvent
 import com.jakewharton.mosaic.modifier.Modifier
 import com.jakewharton.mosaic.ui.Column
 import com.jakewharton.mosaic.ui.Text
-import git.GitClient
-import git.GitError
+import com.suvanl.mybranches.git.GitClient
+import com.suvanl.mybranches.git.GitError
 import kotlinx.coroutines.awaitCancellation
 
 @Composable
@@ -72,18 +72,22 @@ fun App(
                     state = ready.moveUp()
                     true
                 }
+
                 KeyEvent("ArrowDown") -> {
                     state = ready.moveDown(pageSize)
                     true
                 }
+
                 KeyEvent("Enter") -> {
                     state = AppState.Switching(ready.branches[ready.selected].name)
                     true
                 }
+
                 KeyEvent("q"), KeyEvent("Escape") -> {
                     state = AppState.Cancelled
                     true
                 }
+
                 else -> false
             }
         }
@@ -94,13 +98,17 @@ fun App(
     Column(modifier = keyModifier) {
         when (val s = state) {
             AppState.Loading -> Text("Loading...")
+
             AppState.Empty -> Text("No branches matching '$username/*'")
+
             is AppState.Ready -> {
                 Text("mybranches — ↑↓ navigate  enter select  q quit")
                 val visiblePageStart = visiblePageStart(s.selected, s.pageStart, pageSize)
                 BranchList(s.branches, s.selected, visiblePageStart, pageSize)
             }
+
             is AppState.Switching -> Text("Switching to ${s.target}...")
+
             is AppState.Switched, is AppState.Failed, AppState.Cancelled -> {}
         }
     }
@@ -109,4 +117,3 @@ fun App(
         LaunchedEffect(Unit) { awaitCancellation() }
     }
 }
-
