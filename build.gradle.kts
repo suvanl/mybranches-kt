@@ -1,6 +1,8 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
+    id("org.jlleitschuh.gradle.ktlint") version "14.2.0"
+
     kotlin("multiplatform") version "2.3.20"
     kotlin("plugin.compose") version "2.3.20"
 }
@@ -35,6 +37,10 @@ kotlin {
             }
         }
     }
+}
+
+dependencies {
+    ktlintRuleset("io.nlopez.compose.rules:ktlint:0.5.7")
 }
 
 tasks.withType<Wrapper> {

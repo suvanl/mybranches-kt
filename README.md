@@ -17,5 +17,5 @@ To run the project, execute the `build/bin/<targetName>/debugExecutable/<project
 for example:
 
 ```shell
-build/bin/macosArm64/debugExecutable/mybranches.kt.kexe
+build/bin/macosArm64/debugExecutable/mybranches.kexe
 ```
