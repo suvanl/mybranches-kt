@@ -1,8 +1,6 @@
+package com.suvanl.mybranches.ui
+
 import com.suvanl.mybranches.git.Branch
-import com.suvanl.mybranches.ui.AppState
-import com.suvanl.mybranches.ui.moveDown
-import com.suvanl.mybranches.ui.moveUp
-import com.suvanl.mybranches.ui.visiblePageStart
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test
 
