@@ -14,7 +14,7 @@ class RealGitClient : GitClient {
             "--sort=-committerdate",
             "--format=%(HEAD)%(refname:short)",
         )
-        if (!result.succeeded) {
+        if (!result.success) {
             val output = result.output
             if (output.contains("not a git repository", ignoreCase = true)) {
                 throw GitError.NotARepository(".")
@@ -26,14 +26,14 @@ class RealGitClient : GitClient {
             .filter { it.isNotBlank() }
             .map { line ->
                 val current = line.startsWith("*")
-                val name = line.removePrefix("*").removePrefix(" ").trim()
+                val name = line.removePrefix("*").trim()
                 Branch(name = name, isCurrent = current)
             }
     }
 
     override suspend fun switchBranch(name: String) = withContext(Dispatchers.Default) {
         val result = runCommand("git", "switch", name)
-        if (!result.succeeded) {
+        if (!result.success) {
             throw GitError.CommandFailed(result.output.ifBlank { "git switch failed" })
         }
     }
