@@ -1,6 +1,6 @@
 package com.suvanl.mybranches.system
 
-data class CommandResult(
+data class CommandRunResult(
     val output: String,
-    val succeeded: Boolean,
+    val success: Boolean,
 )
