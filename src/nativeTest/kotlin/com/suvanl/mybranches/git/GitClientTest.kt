@@ -1,6 +1,6 @@
 package com.suvanl.mybranches.git
 
-import com.suvanl.mybranches.system.CommandResult
+import com.suvanl.mybranches.system.CommandRunResult
 import com.suvanl.mybranches.system.CommandRunner
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.throwables.shouldThrowExactly
@@ -126,7 +126,7 @@ class GitClientTest {
     @Test
     fun shouldInvokeGitBranchWithExpectedArgs() = runTest {
         // Given
-        val runner = CapturingRunner(result = CommandResult(output = "", success = true))
+        val runner = CapturingRunner(result = CommandRunResult(output = "", success = true))
         val client = GitClient(runner)
 
         // When
@@ -146,7 +146,7 @@ class GitClientTest {
     @Test
     fun shouldInvokeGitSwitchWithTargetBranch() = runTest {
         // Given
-        val runner = CapturingRunner(result = CommandResult(output = "", success = true))
+        val runner = CapturingRunner(result = CommandRunResult(output = "", success = true))
         val client = GitClient(runner)
 
         // When
@@ -171,14 +171,14 @@ class GitClientTest {
     }
 
     private fun givenGitClientReturning(output: String, success: Boolean) = GitClient { _ ->
-        CommandResult(output, success)
+        CommandRunResult(output, success)
     }
 
-    private class CapturingRunner(private val result: CommandResult) : CommandRunner {
+    private class CapturingRunner(private val result: CommandRunResult) : CommandRunner {
         var capturedArgs: List<String> = emptyList()
             private set
 
-        override fun run(vararg args: String): CommandResult {
+        override fun run(vararg args: String): CommandRunResult {
             capturedArgs = args.toList()
             return result
         }

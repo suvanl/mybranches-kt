@@ -12,11 +12,11 @@ import platform.posix.popen
 private const val DEFAULT_BUFFER_SIZE = 4096
 
 @OptIn(ExperimentalForeignApi::class)
-fun runCommand(vararg args: String): CommandResult {
+fun runCommand(vararg args: String): CommandRunResult {
     val escaped = args.joinToString(" ") { arg ->
         "'" + arg.replace("'", "'\\''") + "'"
     }
-    val fp = popen("$escaped 2>&1", "r") ?: return CommandResult("", false)
+    val fp = popen("$escaped 2>&1", "r") ?: return CommandRunResult("", false)
 
     val output = StringBuilder()
     memScoped {
@@ -28,5 +28,5 @@ fun runCommand(vararg args: String): CommandResult {
     }
 
     val status = pclose(fp)
-    return CommandResult(output.toString().trimEnd(), status == 0)
+    return CommandRunResult(output.toString().trimEnd(), status == 0)
 }

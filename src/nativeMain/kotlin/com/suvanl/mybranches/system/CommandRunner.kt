@@ -1,5 +1,5 @@
 package com.suvanl.mybranches.system
 
 fun interface CommandRunner {
-    fun run(vararg args: String): CommandResult
+    fun run(vararg args: String): CommandRunResult
 }
