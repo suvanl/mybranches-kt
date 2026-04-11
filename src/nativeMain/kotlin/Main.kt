@@ -1,5 +1,5 @@
 import com.jakewharton.mosaic.runMosaicMain
-import com.suvanl.mybranches.git.RealGitClient
+import com.suvanl.mybranches.git.GitClient
 import com.suvanl.mybranches.system.currentUsername
 import com.suvanl.mybranches.ui.App
 import com.suvanl.mybranches.ui.AppState
@@ -16,7 +16,7 @@ fun main() {
     var finalState: AppState = AppState.Cancelled
     runMosaicMain {
         App(
-            gitClient = RealGitClient(),
+            gitClient = GitClient(),
             branchNamePattern = "$username/*",
             onExit = { finalState = it },
         )

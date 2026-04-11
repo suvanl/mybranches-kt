@@ -1,18 +1,43 @@
 package com.suvanl.mybranches.git
 
-data class Branch(
-    val name: String,
-    val isCurrent: Boolean,
-)
+import com.suvanl.mybranches.system.CommandRunner
+import com.suvanl.mybranches.system.runCommand
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-interface GitClient {
-    /**
-     * Returns local branches matching [pattern], sorted by most recent commit first
-     */
-    suspend fun listBranches(pattern: String): List<Branch>
+class GitClient(
+    private val runner: CommandRunner = { args -> runCommand(*args) },
+) {
+    suspend fun listBranches(pattern: String): List<Branch> = withContext(Dispatchers.Default) {
+        val result = runner.run(
+            "git",
+            "branch",
+            "--list",
+            pattern,
+            "--sort=-committerdate",
+            "--format=%(HEAD)%(refname:short)",
+        )
+        if (!result.success) {
+            val output = result.output
+            if (output.contains("not a git repository", ignoreCase = true)) {
+                throw GitError.NotARepository(".")
+            }
+            throw GitError.CommandFailed(output.ifBlank { "git branch failed" })
+        }
+        result.output
+            .lines()
+            .filter { it.isNotBlank() }
+            .map { line ->
+                val current = line.startsWith("*")
+                val name = line.removePrefix("*").trim()
+                Branch(name = name, isCurrent = current)
+            }
+    }
 
-    /**
-     * @throws GitError on failure
-     */
-    suspend fun switchBranch(name: String)
+    suspend fun switchBranch(name: String) = withContext(Dispatchers.Default) {
+        val result = runner.run("git", "switch", name)
+        if (!result.success) {
+            throw GitError.CommandFailed(result.output.ifBlank { "git switch failed" })
+        }
+    }
 }
