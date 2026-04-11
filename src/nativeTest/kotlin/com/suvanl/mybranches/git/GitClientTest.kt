@@ -126,7 +126,7 @@ class GitClientTest {
     @Test
     fun shouldInvokeGitBranchWithExpectedArgs() = runTest {
         // Given
-        val runner = RecordingRunner(result = CommandResult(output = "", success = true))
+        val runner = CapturingRunner(result = CommandResult(output = "", success = true))
         val client = GitClient(runner)
 
         // When
@@ -146,7 +146,7 @@ class GitClientTest {
     @Test
     fun shouldInvokeGitSwitchWithTargetBranch() = runTest {
         // Given
-        val runner = RecordingRunner(result = CommandResult(output = "", success = true))
+        val runner = CapturingRunner(result = CommandResult(output = "", success = true))
         val client = GitClient(runner)
 
         // When
@@ -174,7 +174,7 @@ class GitClientTest {
         CommandResult(output, success)
     }
 
-    private class RecordingRunner(private val result: CommandResult) : CommandRunner {
+    private class CapturingRunner(private val result: CommandResult) : CommandRunner {
         var capturedArgs: List<String> = emptyList()
             private set
 
