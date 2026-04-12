@@ -22,9 +22,9 @@ fun main() {
         )
     }
 
-    when (val s = finalState) {
+    when (val state = finalState) {
         is AppState.Failed -> {
-            println("mb: ${s.message}")
+            println("mb: ${state.message}")
             exitProcess(1)
         }
 

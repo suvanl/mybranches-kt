@@ -26,6 +26,7 @@ fun App(
 ) {
     var state by remember { mutableStateOf<AppState>(AppState.Loading) }
     val terminalRows = LocalTerminalState.current.size.rows
+    // Reserve 1 row for the header and 1 for the pagination counter (only rendered if branches.size > pageSize)
     val pageSize = (terminalRows - 2).coerceAtLeast(1)
 
     LaunchedEffect(Unit) {
@@ -34,7 +35,7 @@ fun App(
             if (branches.isEmpty()) {
                 AppState.Empty
             } else {
-                val currentIndex = branches.indexOfFirst { it.isCurrent }.takeIf { it >= 0 } ?: 0
+                val currentIndex = branches.indexOfFirst { it.isCurrent }.coerceAtLeast(0)
                 AppState.Ready(branches, selectedItemIndex = currentIndex, pageStartIndex = 0)
             }
         } catch (e: GitError) {
