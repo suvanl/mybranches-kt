@@ -15,7 +15,7 @@ fun ColumnScope.BranchListScreen(
 ) {
     HeaderRow(
         branchPattern = pattern,
-        help = "↑↓ navigate | enter select | q quit",
+        help = "↑/k ↓/j navigate | enter select | q quit",
         showHelp = showHelp,
     )
     BranchList(
