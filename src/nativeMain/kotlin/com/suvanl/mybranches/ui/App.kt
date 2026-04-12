@@ -99,7 +99,12 @@ fun App(
             is AppState.Ready -> {
                 Text("mybranches — ↑↓ navigate | enter select | q quit")
                 val visiblePageStart = visiblePageStart(s.selectedItemIndex, s.pageStartIndex, pageSize)
-                BranchList(s.branches, s.selectedItemIndex, visiblePageStart, pageSize)
+                BranchList(
+                    branches = s.branches,
+                    selected = s.selectedItemIndex,
+                    pageStart = visiblePageStart,
+                    pageSize = pageSize,
+                )
             }
 
             is AppState.Switching -> Text("Switching to ${s.target}...")
