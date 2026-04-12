@@ -69,12 +69,12 @@ fun App(
             .onKeyEvent { event ->
                 val ready = state as? AppState.Ready ?: return@onKeyEvent false
                 when (event) {
-                    KeyEvent("ArrowUp") -> {
+                    KeyEvent("ArrowUp"), KeyEvent("k") -> {
                         state = ready.moveUp()
                         true
                     }
 
-                    KeyEvent("ArrowDown") -> {
+                    KeyEvent("ArrowDown"), KeyEvent("j") -> {
                         state = ready.moveDown(pageSize)
                         true
                     }

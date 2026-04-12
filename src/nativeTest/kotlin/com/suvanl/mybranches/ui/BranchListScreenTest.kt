@@ -88,7 +88,7 @@ class BranchListScreenTest {
             val snapshot = awaitSnapshot()
 
             // Then
-            snapshot shouldContain "↑↓ navigate | enter select | q quit"
+            snapshot shouldContain "↑/k ↓/j navigate | enter select | q quit"
         }
     }
 }

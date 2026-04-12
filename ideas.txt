@@ -1,9 +1,10 @@
 future ideas/enhancements:
 
 - search (fuzzy) for branch in list
+
 - the user can specify a flag which will first delete any local branches gone from remote before listing the
     remaining local branches
-- vim keybinds for navigation (h/j/k/l)
+
 - allow the user to provide a custom username and/or branch name pattern
 
 - option to include main/master branch in the list

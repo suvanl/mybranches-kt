@@ -171,14 +171,14 @@ class AppTest {
             awaitSnapshot() // ... skip Loading state
             val readySnapshot = awaitSnapshot()
             readySnapshot shouldContain "(? for help)"
-            readySnapshot shouldNotContain "↑↓ navigate"
+            readySnapshot shouldNotContain "↑/k ↓/j navigate"
 
             // When toggle help on
             sendKeyEvent(questionMark)
             val helpShown = awaitSnapshot()
 
             // Then
-            helpShown shouldContain "↑↓ navigate"
+            helpShown shouldContain "↑/k ↓/j navigate"
             helpShown shouldNotContain "(? for help)"
 
             // When toggle help off
@@ -187,7 +187,7 @@ class AppTest {
 
             // Then
             helpHidden shouldContain "(? for help)"
-            helpHidden shouldNotContain "↑↓ navigate"
+            helpHidden shouldNotContain "↑/k ↓/j navigate"
         }
     }
 
