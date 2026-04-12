@@ -12,6 +12,10 @@ import kotlin.test.Test
 
 class AppTest {
 
+    private val arrowDown = KeyboardEvent(codepoint = KeyboardEvent.Down)
+    private val enter = KeyboardEvent(codepoint = '\r'.code)
+    private val qKey = KeyboardEvent(codepoint = 'q'.code)
+
     @Test
     fun shouldShowBranchListAfterLoading() = runTest {
         runMosaicTest {
@@ -148,10 +152,6 @@ class AppTest {
             snapshot shouldContain "> * user/current"
         }
     }
-
-    private val arrowDown = KeyboardEvent(codepoint = KeyboardEvent.Down)
-    private val enter = KeyboardEvent(codepoint = 13)
-    private val qKey = KeyboardEvent(codepoint = 'q'.code)
 
     private class FakeCommandRunner(
         private val listBranchesResult: CommandRunResult,
