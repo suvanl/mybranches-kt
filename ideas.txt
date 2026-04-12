@@ -17,4 +17,5 @@ future ideas/enhancements:
     - see https://kotlinlang.org/docs/native-improving-compilation-time.html
     - if all else fails... try customising LLVM: https://kotlinlang.org/docs/native-llvm-passes.html
 
-- graceful quit on Ctrl+C
+- colours/theme: support both light and dark theme terminals
+    -> use `LocalTerminalState.current.theme` to get current theme

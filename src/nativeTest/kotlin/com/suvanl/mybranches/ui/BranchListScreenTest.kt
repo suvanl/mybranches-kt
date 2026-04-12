@@ -44,11 +44,51 @@ class BranchListScreenTest {
             // ... displays the branch name pattern in use
             snapshot shouldContain "user/*"
 
+            // ... displays the help hint
+            snapshot shouldContain "(? for help)"
+
             // ... displays the list of branches
             snapshot shouldContain """
                 > * user/branch1
                     user/branch2
             """.trimIndent()
+        }
+    }
+
+    @Test
+    fun shouldShowHelpWhenRequested() = runTest {
+        runMosaicTest {
+            // Given
+            setContent {
+                Column {
+                    BranchListScreen(
+                        state = AppState.Ready(
+                            branches = listOf(
+                                Branch(
+                                    name = "user/branch1",
+                                    isCurrent = true,
+                                ),
+                                Branch(
+                                    name = "user/branch2",
+                                    isCurrent = false,
+                                ),
+                            ),
+                            selectedItemIndex = 0,
+                            pageStartIndex = 0,
+                        ),
+                        pattern = "user/*",
+                        pageSize = 4,
+                        // ... help is visible
+                        showHelp = true,
+                    )
+                }
+            }
+
+            // When
+            val snapshot = awaitSnapshot()
+
+            // Then
+            snapshot shouldContain "↑↓ navigate | enter select | q quit"
         }
     }
 }

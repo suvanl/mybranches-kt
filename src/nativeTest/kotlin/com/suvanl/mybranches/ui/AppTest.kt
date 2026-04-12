@@ -7,6 +7,7 @@ import com.suvanl.mybranches.system.CommandRunResult
 import com.suvanl.mybranches.system.CommandRunner
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
@@ -15,6 +16,7 @@ class AppTest {
     private val arrowDown = KeyboardEvent(codepoint = KeyboardEvent.Down)
     private val enter = KeyboardEvent(codepoint = '\r'.code)
     private val qKey = KeyboardEvent(codepoint = 'q'.code)
+    private val questionMark = KeyboardEvent(codepoint = '?'.code)
 
     @Test
     fun shouldShowBranchListAfterLoading() = runTest {
@@ -153,6 +155,39 @@ class AppTest {
 
             // Then
             snapshot shouldContain "> * user/current"
+        }
+    }
+
+    @Test
+    fun shouldToggleHelpOnQuestionMark() = runTest {
+        runMosaicTest {
+            // Given
+            val runner = FakeCommandRunner(
+                listBranchesResult = CommandRunResult(output = " user/feature\n", success = true),
+            )
+            setContent {
+                App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
+            }
+            awaitSnapshot() // ... skip Loading state
+            val readySnapshot = awaitSnapshot()
+            readySnapshot shouldContain "(? for help)"
+            readySnapshot shouldNotContain "↑↓ navigate"
+
+            // When toggle help on
+            sendKeyEvent(questionMark)
+            val helpShown = awaitSnapshot()
+
+            // Then
+            helpShown shouldContain "↑↓ navigate"
+            helpShown shouldNotContain "(? for help)"
+
+            // When toggle help off
+            sendKeyEvent(questionMark)
+            val helpHidden = awaitSnapshot()
+
+            // Then
+            helpHidden shouldContain "(? for help)"
+            helpHidden shouldNotContain "↑↓ navigate"
         }
     }
 
