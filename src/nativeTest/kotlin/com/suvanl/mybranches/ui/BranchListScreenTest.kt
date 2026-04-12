@@ -32,7 +32,7 @@ class BranchListScreenTest {
                         ),
                         pattern = "user/*",
                         pageSize = 4,
-                        showHelp = true,
+                        showHelp = false,
                     )
                 }
             }
