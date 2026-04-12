@@ -1,6 +1,8 @@
 # mybranches-kt
 
-## Build and run the project
+## Development
+
+### Build and run the project
 
 From the root project directory, run the `<targetName>Binaries` build command for the desired compilation target, e.g.
 
@@ -8,7 +10,7 @@ From the root project directory, run the `<targetName>Binaries` build command fo
 ./gradlew macosArm64Binaries
 ```
 
-This command creates the `build/bin/targetName>` directory with two directories inside: `debugExecutable` and
+This command creates the `build/bin/<targetName>` directory with two directories inside: `debugExecutable` and
 `releaseExecutable`. They contain the corresponding binary files.
 
 By default, the name of the binary file is the same as the project directory.
@@ -18,4 +20,10 @@ for example:
 
 ```shell
 build/bin/macosArm64/debugExecutable/mybranches.kexe
+```
+
+### Run the tests
+
+```shell
+./gradlew macosArm64Test
 ```
