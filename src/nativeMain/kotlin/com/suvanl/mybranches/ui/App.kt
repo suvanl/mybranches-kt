@@ -25,6 +25,7 @@ fun App(
     modifier: Modifier = Modifier,
 ) {
     var state by remember { mutableStateOf<AppState>(AppState.Loading) }
+    var showHelp by remember { mutableStateOf(false) }
     val terminalRows = LocalTerminalState.current.size.rows
     // Reserve 1 row for the header and 1 for the pagination counter (only rendered if branches.size > pageSize)
     val pageSize = (terminalRows - 2).coerceAtLeast(1)
@@ -83,6 +84,11 @@ fun App(
                         true
                     }
 
+                    KeyEvent("?") -> {
+                        showHelp = !showHelp
+                        true
+                    }
+
                     KeyEvent("q"), KeyEvent("Escape"), KeyEvent("c", ctrl = true) -> {
                         state = AppState.Cancelled
                         true
@@ -102,7 +108,7 @@ fun App(
                     state = appState,
                     pattern = branchNamePattern,
                     pageSize = pageSize,
-                    showHelp = true,
+                    showHelp = showHelp,
                 )
             }
 

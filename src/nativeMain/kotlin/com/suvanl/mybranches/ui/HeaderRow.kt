@@ -28,8 +28,8 @@ fun HeaderRow(
                 .padding(horizontal = 1),
         )
 
-        if (showHelp) {
-            Text(value = help)
-        }
+        Text(
+            value = if (showHelp) help else "(? for help)",
+        )
     }
 }
