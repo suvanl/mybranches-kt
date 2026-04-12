@@ -87,13 +87,16 @@ class AppTest {
     fun shouldSwitchBranchOnEnter() = runTest {
         runMosaicTest {
             // Given
-            var exitState: AppState? = null
             val runner = FakeCommandRunner(
                 listBranchesResult = CommandRunResult(output = " user/feature\n", success = true),
                 switchBranchResult = CommandRunResult(output = "", success = true),
             )
             setContent {
-                App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = { exitState = it })
+                App(
+                    gitClient = GitClient(runner),
+                    branchNamePattern = "user/*",
+                    onExit = { /* do nothing */ },
+                )
             }
             awaitSnapshot() // ... skip Loading state
             awaitSnapshot() // ... in Ready state
