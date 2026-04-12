@@ -9,3 +9,12 @@ future ideas/enhancements:
 - option to include main/master branch in the list
 
 - custom branch list sort order (e.g. alphabetical instead of by committer date)
+
+- extract a default reusable CommandRunner impl (e.g. DefaultCommandRunner) for non-test usage
+    - if we ever need it anywhere outside of GitClient
+
+- improve compilation time:
+    - see https://kotlinlang.org/docs/native-improving-compilation-time.html
+    - if all else fails... try customising LLVM: https://kotlinlang.org/docs/native-llvm-passes.html
+
+- graceful quit on Ctrl+C

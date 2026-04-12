@@ -97,19 +97,28 @@ fun App(
             AppState.Empty -> Text("No branches matching '$branchNamePattern'")
 
             is AppState.Ready -> {
-                Text("mybranches — ↑↓ navigate | enter select | q quit")
-                val visiblePageStart = visiblePageStart(s.selectedItemIndex, s.pageStartIndex, pageSize)
+                HeaderRow(
+                    branchPattern = branchNamePattern,
+                    help = "↑↓ navigate | enter select | q quit",
+                    showHelp = true,
+                )
                 BranchList(
                     branches = s.branches,
                     selected = s.selectedItemIndex,
-                    pageStart = visiblePageStart,
+                    pageStart = visiblePageStart(s.selectedItemIndex, s.pageStartIndex, pageSize),
                     pageSize = pageSize,
                 )
             }
 
-            is AppState.Switching -> Text("Switching to ${s.target}...")
+            is AppState.Switching -> {
+                // FIXME: if `git switch` happens quick, this flashes for a very brief moment.
+                //  Maybe only show if it takes longer than n milliseconds
+                Text("Switching to ${s.target}...")
+            }
 
-            is AppState.Switched, is AppState.Failed, AppState.Cancelled -> {}
+            is AppState.Switched -> Text("Switched to branch '${s.target}'")
+
+            is AppState.Failed, AppState.Cancelled -> {}
         }
     }
 
