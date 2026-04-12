@@ -18,6 +18,7 @@ kotlin {
     targets.withType<KotlinNativeTarget>().configureEach {
         binaries {
             executable {
+                baseName = "mb"
                 entryPoint = "com.suvanl.mybranches.main"
             }
         }

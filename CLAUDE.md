@@ -11,7 +11,7 @@ with [Mosaic](https://github.com/JakeWharton/mosaic) (Compose for terminal).
 ./gradlew macosArm64Test              # run tests
 ```
 
-Binary output: `build/bin/macosArm64/debugExecutable/mybranches.kexe`
+Binary output: `build/bin/macosArm64/debugExecutable/mb.kexe`
 
 ## Writing unit tests
 
