@@ -17,13 +17,14 @@ class GitClient(
             "--sort=-committerdate",
             "--format=%(HEAD)%(refname:short)",
         )
+
         if (!result.success) {
-            val output = result.output
-            if (output.contains("not a git repository", ignoreCase = true)) {
+            if (result.output.contains("not a git repository", ignoreCase = true)) {
                 throw GitError.NotARepository(".")
             }
-            throw GitError.CommandFailed(output.ifBlank { "git branch failed" })
+            throw GitError.CommandFailed(result.output.ifBlank { "git branch failed" })
         }
+
         result.output
             .lines()
             .filter { it.isNotBlank() }

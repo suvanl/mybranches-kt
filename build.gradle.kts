@@ -31,6 +31,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
                 implementation("io.kotest:kotest-assertions-core:6.1.11")
+                implementation("com.jakewharton.mosaic:mosaic-testing:0.18.0")
             }
         }
     }
