@@ -1,3 +1,5 @@
+package com.suvanl.mybranches
+
 import com.jakewharton.mosaic.runMosaicMain
 import com.suvanl.mybranches.git.GitClient
 import com.suvanl.mybranches.system.currentUsername
