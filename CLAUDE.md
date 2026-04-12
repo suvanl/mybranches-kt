@@ -38,3 +38,4 @@ Testing technologies:
 - kotlin-test: as a test runner
 - Kotest: for assertions
 - MockK: for mocking
+- mosaic-testing: for UI integration tests (`runMosaicTest`, `awaitSnapshot`, `sendKeyEvent`)
