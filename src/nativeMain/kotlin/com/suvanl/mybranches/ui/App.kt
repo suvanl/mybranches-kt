@@ -82,7 +82,7 @@ fun App(
                         true
                     }
 
-                    KeyEvent("q"), KeyEvent("Escape") -> {
+                    KeyEvent("q"), KeyEvent("Escape"), KeyEvent("c", ctrl = true) -> {
                         state = AppState.Cancelled
                         true
                     }
