@@ -18,15 +18,19 @@ fun BranchList(
     val visibleBranches = branches.subList(pageStart, pageEnd)
 
     Column(modifier = modifier) {
-        for ((offset, branch) in visibleBranches.withIndex()) {
-            val index = pageStart + offset
-            val cursor = if (index == selected) ">" else " "
-            val currentMarker = if (branch.isCurrent) "* " else "  "
-            Text("$cursor $currentMarker${branch.name}")
-        }
+        if (branches.isEmpty()) {
+            Text("  No matching branches")
+        } else {
+            for ((offset, branch) in visibleBranches.withIndex()) {
+                val index = pageStart + offset
+                val cursor = if (index == selected) ">" else " "
+                val currentMarker = if (branch.isCurrent) "* " else "  "
+                Text("$cursor $currentMarker${branch.name}")
+            }
 
-        if (branches.size > pageSize) {
-            Text("  ${selected + 1}/${branches.size}")
+            if (branches.size > pageSize) {
+                Text("  ${selected + 1}/${branches.size}")
+            }
         }
     }
 }

@@ -14,6 +14,8 @@ fun HeaderRow(
     branchPattern: String,
     help: String,
     showHelp: Boolean,
+    searchQuery: String,
+    isSearching: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -28,8 +30,11 @@ fun HeaderRow(
                 .padding(horizontal = 1),
         )
 
-        Text(
-            value = if (showHelp) help else "(? for help)",
-        )
+        when {
+            isSearching -> Text(value = "/ $searchQuery█", color = ThemeColor.primaryDark)
+            searchQuery.isNotEmpty() -> Text(value = "/ $searchQuery", color = ThemeColor.dimDark)
+            showHelp -> Text(value = help)
+            else -> Text(value = "(? for help)")
+        }
     }
 }

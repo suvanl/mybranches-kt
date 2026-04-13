@@ -4,6 +4,7 @@ import com.jakewharton.mosaic.testing.runMosaicTest
 import com.jakewharton.mosaic.ui.Column
 import com.suvanl.mybranches.git.Branch
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
@@ -56,6 +57,76 @@ class BranchListScreenTest {
     }
 
     @Test
+    fun shouldShowSearchQueryInHeaderWhenSearching() = runTest {
+        runMosaicTest {
+            // Given
+            setContent {
+                Column {
+                    BranchListScreen(
+                        state = givenReadyState(searchQuery = "feat", isSearching = true),
+                        pattern = "user/*",
+                        pageSize = 4,
+                        showHelp = false,
+                    )
+                }
+            }
+
+            // When
+            val snapshot = awaitSnapshot()
+
+            // Then
+            snapshot shouldContain "/ feat█"
+        }
+    }
+
+    @Test
+    fun shouldShowFilteredResultsOnly() = runTest {
+        runMosaicTest {
+            // Given
+            setContent {
+                Column {
+                    BranchListScreen(
+                        state = givenReadyState(searchQuery = "branch1"),
+                        pattern = "user/*",
+                        pageSize = 4,
+                        showHelp = false,
+                    )
+                }
+            }
+
+            // When
+            val snapshot = awaitSnapshot()
+
+            // Then
+            snapshot shouldContain "user/branch1"
+            snapshot shouldNotContain "user/branch2"
+        }
+    }
+
+    @Test
+    fun shouldShowNoMatchingBranchesWhenFilterMatchesNothing() = runTest {
+        runMosaicTest {
+            // Given
+            setContent {
+                Column {
+                    BranchListScreen(
+                        state = givenReadyState(searchQuery = "zzz"),
+                        pattern = "user/*",
+                        pageSize = 4,
+                        showHelp = false,
+                    )
+                }
+            }
+
+            // When
+            val snapshot = awaitSnapshot()
+
+            // Then
+            snapshot shouldContain "No matching branches"
+        }
+    }
+
+    @Test
     fun shouldShowHelpWhenRequested() = runTest {
         runMosaicTest {
             // Given
@@ -88,7 +159,22 @@ class BranchListScreenTest {
             val snapshot = awaitSnapshot()
 
             // Then
-            snapshot shouldContain "↑/k ↓/j navigate | enter select | q quit"
+            snapshot shouldContain "↑/k ↓/j navigate | enter select | / search | q quit"
         }
     }
+
+    private fun givenReadyState(
+        searchQuery: String = "",
+        isSearching: Boolean = false,
+    ) = AppState.Ready(
+        branches = listOf(
+            Branch(name = "user/branch1", isCurrent = true),
+            Branch(name = "user/branch2", isCurrent = false),
+        ),
+        selectedItemIndex = 0,
+        pageStartIndex = 0,
+        branchPrefix = "user/",
+        searchQuery = searchQuery,
+        isSearching = isSearching,
+    )
 }

@@ -15,11 +15,13 @@ fun ColumnScope.BranchListScreen(
 ) {
     HeaderRow(
         branchPattern = pattern,
-        help = "↑/k ↓/j navigate | enter select | q quit",
+        help = "↑/k ↓/j navigate | enter select | / search | q quit",
         showHelp = showHelp,
+        searchQuery = state.searchQuery,
+        isSearching = state.isSearching,
     )
     BranchList(
-        branches = state.branches,
+        branches = state.displayedBranches,
         selected = state.selectedItemIndex,
         pageStart = visiblePageStart(state.selectedItemIndex, state.pageStartIndex, pageSize),
         pageSize = pageSize,
