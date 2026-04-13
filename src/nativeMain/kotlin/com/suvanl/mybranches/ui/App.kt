@@ -27,8 +27,11 @@ fun App(
     var state by remember { mutableStateOf<AppState>(AppState.Loading) }
     var showHelp by remember { mutableStateOf(false) }
     val terminalRows = LocalTerminalState.current.size.rows
-    // Reserve 1 row for the header and 1 for the pagination counter (only rendered if branches.size > pageSize)
-    val pageSize = (terminalRows - 2).coerceAtLeast(1)
+    // Subtract 3 to account for:
+    //  - 1 row for the header
+    //  - 1 for the pagination counter
+    //  - 1 for the terminal cursor row (Mosaic behaviour)
+    val pageSize = (terminalRows - 3).coerceAtLeast(1)
 
     LaunchedEffect(Unit) {
         state = try {
