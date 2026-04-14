@@ -4,6 +4,12 @@
 one through an interactive TUI, and runs `git switch`. The TUI is built
 with [Mosaic](https://github.com/JakeWharton/mosaic) (Compose for terminal).
 
+## Useful resources
+
+- Kotlin/Native docs:
+  ~/gh/extern/JetBrains/kotlin-web-site/docs/topics/native
+- Mosaic source code: ~/gh/extern/JakeWharton/mosaic
+
 ## Build and run
 
 ```sh

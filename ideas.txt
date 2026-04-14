@@ -20,3 +20,6 @@ future ideas/enhancements:
 
 - colours/theme: support both light and dark theme terminals
     -> use `LocalTerminalState.current.theme` to get current theme
+        -> seems to always report Unknown though... (tried Terminal.app, iTerm2, Ghostty)
+
+- show current branch in a different color (i.e. git does it in green) in addition to `*` indicator

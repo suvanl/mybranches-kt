@@ -61,13 +61,13 @@ class FuzzyMatchTest {
 
     @Test
     fun shouldMatchEmptyQueryAgainstEmptyText() {
-        // Given / When / Then
+        // When / Then
         "".fuzzyContains("") shouldBe true
     }
 
     @Test
     fun shouldNotMatchNonEmptyQueryAgainstEmptyText() {
-        // Given / When / Then
+        // When / Then
         "".fuzzyContains("a") shouldBe false
     }
 }
