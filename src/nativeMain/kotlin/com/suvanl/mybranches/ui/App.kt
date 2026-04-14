@@ -78,7 +78,7 @@ fun App(
                 if (ready.isSearching) {
                     when {
                         event == KeyEvent("Escape") -> {
-                            state = ready.copy(isSearching = false, searchQuery = "", selectedItemIndex = 0, pageStartIndex = 0)
+                            state = ready.copy(isSearching = false)
                         }
 
                         event == KeyEvent("Enter") -> {
@@ -140,7 +140,16 @@ fun App(
                             true
                         }
 
-                        KeyEvent("q"), KeyEvent("Escape"), KeyEvent("c", ctrl = true) -> {
+                        KeyEvent("Escape") -> {
+                            state = if (ready.searchQuery.isNotEmpty()) {
+                                ready.copy(searchQuery = "", selectedItemIndex = 0, pageStartIndex = 0)
+                            } else {
+                                AppState.Cancelled
+                            }
+                            true
+                        }
+
+                        KeyEvent("q"), KeyEvent("c", ctrl = true) -> {
                             state = AppState.Cancelled
                             true
                         }
