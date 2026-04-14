@@ -1,6 +1,7 @@
 package com.suvanl.mybranches.ui
 
 import com.jakewharton.mosaic.terminal.KeyboardEvent
+import com.jakewharton.mosaic.testing.TestMosaic
 import com.jakewharton.mosaic.testing.runMosaicTest
 import com.suvanl.mybranches.git.GitClient
 import com.suvanl.mybranches.system.CommandRunResult
@@ -208,7 +209,7 @@ class AppTest {
 
             // When
             sendKeyEvent(slash)
-            sendKeyEvent(KeyboardEvent(codepoint = 'f'.code))
+            typeSearchQuery("f")
             val snapshot = awaitSnapshot()
 
             // Then
@@ -234,10 +235,7 @@ class AppTest {
             // When
             // ... search for "feat"
             sendKeyEvent(slash)
-            sendKeyEvent(KeyboardEvent(codepoint = 'f'.code))
-            sendKeyEvent(KeyboardEvent(codepoint = 'e'.code))
-            sendKeyEvent(KeyboardEvent(codepoint = 'a'.code))
-            sendKeyEvent(KeyboardEvent(codepoint = 't'.code))
+            typeSearchQuery("feat")
             // ... hit Esc
             sendKeyEvent(escape)
             val snapshot = awaitSnapshot()
@@ -262,12 +260,9 @@ class AppTest {
             awaitSnapshot()
 
             // When
-            // ... search,
+            // ... search
             sendKeyEvent(slash)
-            sendKeyEvent(KeyboardEvent(codepoint = 'f'.code))
-            sendKeyEvent(KeyboardEvent(codepoint = 'e'.code))
-            sendKeyEvent(KeyboardEvent(codepoint = 'a'.code))
-            sendKeyEvent(KeyboardEvent(codepoint = 't'.code))
+            typeSearchQuery("feat")
             // ... lock filter with Escape
             sendKeyEvent(escape)
             awaitSnapshot()
@@ -322,8 +317,7 @@ class AppTest {
             // ... enter search mode
             sendKeyEvent(slash)
             // ... type query
-            sendKeyEvent(KeyboardEvent(codepoint = 'b'.code))
-            sendKeyEvent(KeyboardEvent(codepoint = 'f'.code))
+            typeSearchQuery("bf")
             // ... exit search mode using Enter key (lock filter)
             sendKeyEvent(enter)
             val snapshot = awaitSnapshot()
@@ -379,13 +373,17 @@ class AppTest {
 
             // When
             sendKeyEvent(slash)
-            sendKeyEvent(KeyboardEvent(codepoint = 'z'.code))
-            sendKeyEvent(KeyboardEvent(codepoint = 'z'.code))
-            sendKeyEvent(KeyboardEvent(codepoint = 'z'.code))
+            typeSearchQuery("zzz")
             val snapshot = awaitSnapshot()
 
             // Then
             snapshot shouldContain "No matching branches"
+        }
+    }
+
+    private fun <T> TestMosaic<T>.typeSearchQuery(query: String) {
+        query.forEach { char ->
+            sendKeyEvent(KeyboardEvent(codepoint = char.code))
         }
     }
 
