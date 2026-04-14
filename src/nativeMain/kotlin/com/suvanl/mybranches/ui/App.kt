@@ -90,11 +90,11 @@ fun App(
                             state = ready.copy(searchQuery = newQuery, selectedItemIndex = 0, pageStartIndex = 0)
                         }
 
-                        event == KeyEvent("ArrowUp") || event == KeyEvent("k") -> {
+                        event == KeyEvent("ArrowUp") -> {
                             state = ready.moveUp()
                         }
 
-                        event == KeyEvent("ArrowDown") || event == KeyEvent("j") -> {
+                        event == KeyEvent("ArrowDown") -> {
                             state = ready.moveDown(pageSize)
                         }
 

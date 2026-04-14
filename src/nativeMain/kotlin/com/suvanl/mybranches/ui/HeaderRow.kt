@@ -31,10 +31,27 @@ fun HeaderRow(
         )
 
         when {
-            isSearching -> Text(value = "/ $searchQuery█", color = ThemeColor.primaryDark)
-            searchQuery.isNotEmpty() -> Text(value = "/ $searchQuery", color = ThemeColor.dimDark)
-            showHelp -> Text(value = help)
-            else -> Text(value = "(? for help)")
+            isSearching -> {
+                Text(
+                    value = "/ $searchQuery█",
+                    color = ThemeColor.primaryDark,
+                )
+            }
+
+            searchQuery.isNotEmpty() -> {
+                Text(
+                    value = "/ $searchQuery",
+                    color = ThemeColor.dimDark,
+                )
+            }
+
+            showHelp -> {
+                Text(value = help)
+            }
+
+            else -> {
+                Text(value = "(? for help)")
+            }
         }
     }
 }
