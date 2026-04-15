@@ -1,6 +1,6 @@
 future ideas/enhancements:
 
-- search (fuzzy) for branch in list
+- switch to case-sensitive fuzzy find (instead of insensitive)?
 
 - the user can specify a flag which will first delete any local branches gone from remote before listing the
     remaining local branches
