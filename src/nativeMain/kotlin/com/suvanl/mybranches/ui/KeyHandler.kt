@@ -17,7 +17,11 @@ private fun AppState.Ready.handleActiveSearchKey(
     val activeSearch = searchState as SearchState.Active
     return when {
         event == KeyEvent(key = "Escape") || event == KeyEvent(key = "Enter") -> {
-            copy(searchState = SearchState.Filtered(activeSearch.query))
+            if (activeSearch.query.isEmpty()) {
+                copy(searchState = SearchState.Inactive)
+            } else {
+                copy(searchState = SearchState.Filtered(activeSearch.query))
+            }
         }
 
         event == KeyEvent(key = "Backspace") -> {
