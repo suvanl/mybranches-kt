@@ -63,7 +63,7 @@ class BranchListScreenTest {
             setContent {
                 Column {
                     BranchListScreen(
-                        state = givenReadyState(searchQuery = "feat", isSearching = true),
+                        state = givenReadyState(searchState = SearchState.Active("feat")),
                         pattern = "user/*",
                         pageSize = 4,
                         showHelp = false,
@@ -86,7 +86,7 @@ class BranchListScreenTest {
             setContent {
                 Column {
                     BranchListScreen(
-                        state = givenReadyState(searchQuery = "branch1"),
+                        state = givenReadyState(searchState = SearchState.Filtered("branch1")),
                         pattern = "user/*",
                         pageSize = 4,
                         showHelp = false,
@@ -110,7 +110,7 @@ class BranchListScreenTest {
             setContent {
                 Column {
                     BranchListScreen(
-                        state = givenReadyState(searchQuery = "zzz"),
+                        state = givenReadyState(searchState = SearchState.Active("zzz")),
                         pattern = "user/*",
                         pageSize = 4,
                         showHelp = false,
@@ -164,8 +164,7 @@ class BranchListScreenTest {
     }
 
     private fun givenReadyState(
-        searchQuery: String = "",
-        isSearching: Boolean = false,
+        searchState: SearchState = SearchState.Inactive,
     ) = AppState.Ready(
         branches = listOf(
             Branch(name = "user/branch1", isCurrent = true),
@@ -174,7 +173,6 @@ class BranchListScreenTest {
         selectedItemIndex = 0,
         pageStartIndex = 0,
         branchPrefix = "user/",
-        searchQuery = searchQuery,
-        isSearching = isSearching,
+        searchState = searchState,
     )
 }

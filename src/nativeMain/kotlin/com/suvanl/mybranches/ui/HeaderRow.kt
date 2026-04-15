@@ -14,8 +14,7 @@ fun HeaderRow(
     branchPattern: String,
     help: String,
     showHelp: Boolean,
-    searchQuery: String,
-    isSearching: Boolean,
+    searchState: SearchState,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -30,27 +29,25 @@ fun HeaderRow(
                 .padding(horizontal = 1),
         )
 
-        when {
-            isSearching -> {
+        when (searchState) {
+            is SearchState.Active -> {
                 Text(
-                    value = "/ $searchQuery█",
+                    value = "/ ${searchState.query}█",
                     color = ThemeColor.primaryDark,
                 )
             }
 
-            searchQuery.isNotEmpty() -> {
+            is SearchState.Filtered -> {
                 Text(
-                    value = "/ $searchQuery",
+                    value = "/ ${searchState.query}",
                     color = ThemeColor.dimDark,
                 )
             }
 
-            showHelp -> {
-                Text(value = help)
-            }
-
-            else -> {
-                Text(value = "(? for help)")
+            SearchState.Inactive -> {
+                Text(
+                    value = if (showHelp) help else "(? for help)",
+                )
             }
         }
     }

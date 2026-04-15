@@ -2,7 +2,6 @@ package com.suvanl.mybranches.ui.theme
 
 import com.jakewharton.mosaic.ui.Color
 
-@Suppress("unused")
 object ThemeColor {
 
     val primaryDark = Color(120, 229, 213)
