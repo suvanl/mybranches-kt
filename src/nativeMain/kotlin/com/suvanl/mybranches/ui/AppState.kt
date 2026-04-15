@@ -20,7 +20,19 @@ sealed interface AppState {
         val branches: List<Branch>,
         val selectedItemIndex: Int,
         val pageStartIndex: Int,
-    ) : AppState
+        val branchPrefix: String = "",
+        val searchQuery: String = "",
+        val isSearching: Boolean = false,
+    ) : AppState {
+        val displayedBranches: List<Branch>
+            get() = if (searchQuery.isBlank()) {
+                branches
+            } else {
+                branches.filter { branch ->
+                    branch.name.removePrefix(branchPrefix).fuzzyContains(searchQuery)
+                }
+            }
+    }
 
     /**
      * User requested branch switch, `git switch` is running

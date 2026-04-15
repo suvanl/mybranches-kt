@@ -1,6 +1,6 @@
 future ideas/enhancements:
 
-- search (fuzzy) for branch in list
+- switch to case-sensitive fuzzy find (instead of insensitive)?
 
 - the user can specify a flag which will first delete any local branches gone from remote before listing the
     remaining local branches
@@ -20,3 +20,6 @@ future ideas/enhancements:
 
 - colours/theme: support both light and dark theme terminals
     -> use `LocalTerminalState.current.theme` to get current theme
+        -> seems to always report Unknown though... (tried Terminal.app, iTerm2, Ghostty)
+
+- show current branch in a different color (i.e. git does it in green) in addition to `*` indicator

@@ -1,6 +1,7 @@
 package com.suvanl.mybranches.ui
 
 import com.jakewharton.mosaic.terminal.KeyboardEvent
+import com.jakewharton.mosaic.testing.TestMosaic
 import com.jakewharton.mosaic.testing.runMosaicTest
 import com.suvanl.mybranches.git.GitClient
 import com.suvanl.mybranches.system.CommandRunResult
@@ -15,8 +16,10 @@ class AppTest {
 
     private val arrowDown = KeyboardEvent(codepoint = KeyboardEvent.Down)
     private val enter = KeyboardEvent(codepoint = '\r'.code)
+    private val escape = KeyboardEvent(codepoint = 0x1B)
     private val qKey = KeyboardEvent(codepoint = 'q'.code)
     private val questionMark = KeyboardEvent(codepoint = '?'.code)
+    private val slash = KeyboardEvent(codepoint = '/'.code)
 
     @Test
     fun shouldShowBranchListAfterLoading() = runTest {
@@ -188,6 +191,199 @@ class AppTest {
             // Then
             helpHidden shouldContain "(? for help)"
             helpHidden shouldNotContain "↑/k ↓/j navigate"
+        }
+    }
+
+    @Test
+    fun shouldFilterBranchesWhenSearching() = runTest {
+        runMosaicTest {
+            // Given
+            val runner = FakeCommandRunner(
+                listBranchesResult = CommandRunResult(output = " user/feature\n user/bugfix\n user/chore\n", success = true),
+            )
+            setContent {
+                App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
+            }
+            awaitSnapshot()
+            awaitSnapshot()
+
+            // When
+            sendKeyEvent(slash)
+            typeSearchQuery("f")
+            val snapshot = awaitSnapshot()
+
+            // Then
+            snapshot shouldContain "user/feature"
+            snapshot shouldContain "user/bugfix"
+            snapshot shouldNotContain "user/chore"
+        }
+    }
+
+    @Test
+    fun shouldKeepFilterOnEscapeFromSearchMode() = runTest {
+        runMosaicTest {
+            // Given
+            val runner = FakeCommandRunner(
+                listBranchesResult = CommandRunResult(output = " user/feature\n user/bugfix\n", success = true),
+            )
+            setContent {
+                App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
+            }
+            awaitSnapshot()
+            awaitSnapshot()
+
+            // When
+            // ... search for "feat"
+            sendKeyEvent(slash)
+            typeSearchQuery("feat")
+            // ... hit Esc
+            sendKeyEvent(escape)
+            val snapshot = awaitSnapshot()
+
+            // Then filter persists
+            snapshot shouldContain "user/feature"
+            snapshot shouldNotContain "user/bugfix"
+        }
+    }
+
+    @Test
+    fun shouldClearFilterOnEscapeFromNormalMode() = runTest {
+        runMosaicTest {
+            // Given
+            val runner = FakeCommandRunner(
+                listBranchesResult = CommandRunResult(output = " user/feature\n user/bugfix\n", success = true),
+            )
+            setContent {
+                App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
+            }
+            awaitSnapshot()
+            awaitSnapshot()
+
+            // When
+            // ... search
+            sendKeyEvent(slash)
+            typeSearchQuery("feat")
+            // ... lock filter with Escape
+            sendKeyEvent(escape)
+            awaitSnapshot()
+            // ... cancel search filter
+            sendKeyEvent(escape)
+            val snapshot = awaitSnapshot()
+
+            // Then full list restored
+            snapshot shouldContain "user/feature"
+            snapshot shouldContain "user/bugfix"
+        }
+    }
+
+    @Test
+    fun shouldQuitOnEscapeWithNoFilter() = runTest {
+        runMosaicTest {
+            // Given
+            var exitState: AppState? = null
+            val runner = FakeCommandRunner(
+                listBranchesResult = CommandRunResult(output = " user/feature\n", success = true),
+            )
+            setContent {
+                App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = { exitState = it })
+            }
+            awaitSnapshot()
+            awaitSnapshot()
+
+            // When
+            sendKeyEvent(escape)
+            awaitSnapshot()
+
+            // Then
+            exitState shouldBe AppState.Cancelled
+        }
+    }
+
+    @Test
+    fun shouldKeepFilterOnEnterAndExitSearchMode() = runTest {
+        runMosaicTest {
+            // Given
+            var exitState: AppState? = null
+            val runner = FakeCommandRunner(
+                listBranchesResult = CommandRunResult(output = " user/feature\n user/bugfix\n", success = true),
+            )
+            setContent {
+                App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = { exitState = it })
+            }
+            awaitSnapshot()
+            awaitSnapshot()
+
+            // When
+            // ... enter search mode
+            sendKeyEvent(slash)
+            // ... type query
+            typeSearchQuery("bf")
+            // ... exit search mode using Enter key (lock filter)
+            sendKeyEvent(enter)
+            val snapshot = awaitSnapshot()
+
+            // Then filter persists
+            snapshot shouldContain "user/bugfix"
+            snapshot shouldNotContain "user/feature"
+
+            // When `q` pressed
+            sendKeyEvent(qKey)
+            awaitSnapshot()
+            // Then program quits gracefully
+            exitState shouldBe AppState.Cancelled
+        }
+    }
+
+    @Test
+    fun shouldNotExitOnQWhileSearching() = runTest {
+        runMosaicTest {
+            // Given
+            var exitState: AppState? = null
+            val runner = FakeCommandRunner(
+                listBranchesResult = CommandRunResult(output = " user/feature\n", success = true),
+            )
+            setContent {
+                App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = { exitState = it })
+            }
+            awaitSnapshot()
+            awaitSnapshot()
+
+            // When
+            sendKeyEvent(slash)
+            sendKeyEvent(qKey)
+            awaitSnapshot()
+
+            // Then
+            exitState shouldBe null
+        }
+    }
+
+    @Test
+    fun shouldShowNoMatchingBranchesWhenSearchMatchesNothing() = runTest {
+        runMosaicTest {
+            // Given
+            val runner = FakeCommandRunner(
+                listBranchesResult = CommandRunResult(output = " user/feature\n", success = true),
+            )
+            setContent {
+                App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
+            }
+            awaitSnapshot()
+            awaitSnapshot()
+
+            // When
+            sendKeyEvent(slash)
+            typeSearchQuery("zzz")
+            val snapshot = awaitSnapshot()
+
+            // Then
+            snapshot shouldContain "No matching branches"
+        }
+    }
+
+    private fun <T> TestMosaic<T>.typeSearchQuery(query: String) {
+        query.forEach { char ->
+            sendKeyEvent(KeyboardEvent(codepoint = char.code))
         }
     }
 

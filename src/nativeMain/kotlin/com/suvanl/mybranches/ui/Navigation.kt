@@ -27,7 +27,7 @@ internal fun AppState.Ready.moveUp(): AppState.Ready {
  * @param currentPageSize Number of currently visible rows in the terminal window
  */
 internal fun AppState.Ready.moveDown(currentPageSize: Int): AppState.Ready {
-    val newSelected = (selectedItemIndex + 1).coerceAtMost(branches.size - 1)
+    val newSelected = (selectedItemIndex + 1).coerceAtMost(displayedBranches.size - 1)
     val pageEnd = pageStartIndex + currentPageSize
     val newPageStart = if (newSelected >= pageEnd) {
         pageStartIndex + 1
