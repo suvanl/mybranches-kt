@@ -26,6 +26,7 @@ fun App(
 ) {
     var state by remember { mutableStateOf<AppState>(AppState.Loading) }
     var showHelp by remember { mutableStateOf(false) }
+
     val terminalRows = LocalTerminalState.current.size.rows
     // Subtract 3 to account for:
     //  - 1 row for the header
@@ -76,90 +77,21 @@ fun App(
     Column(
         modifier = modifier
             .onKeyEvent { event ->
-                val ready = state as? AppState.Ready ?: return@onKeyEvent false
+                val readyState = state as? AppState.Ready ?: return@onKeyEvent false
 
-                if (ready.isSearching) {
-                    when {
-                        event == KeyEvent("Escape") -> {
-                            state = ready.copy(isSearching = false)
-                        }
-
-                        event == KeyEvent("Enter") -> {
-                            state = ready.copy(isSearching = false)
-                        }
-
-                        event == KeyEvent("Backspace") -> {
-                            val newQuery = ready.searchQuery.dropLast(1)
-                            state = ready.copy(searchQuery = newQuery, selectedItemIndex = 0, pageStartIndex = 0)
-                        }
-
-                        event == KeyEvent("ArrowUp") -> {
-                            state = ready.moveUp()
-                        }
-
-                        event == KeyEvent("ArrowDown") -> {
-                            state = ready.moveDown(pageSize)
-                        }
-
-                        event == KeyEvent("c", ctrl = true) -> {
-                            state = AppState.Cancelled
-                        }
-
-                        event.key.length == 1 && !event.ctrl && !event.alt -> {
-                            val newQuery = ready.searchQuery + event.key
-                            state = ready.copy(searchQuery = newQuery, selectedItemIndex = 0, pageStartIndex = 0)
-                        }
-
-                        else -> return@onKeyEvent false
-                    }
-                    true
-                } else {
-                    when (event) {
-                        KeyEvent("/") -> {
-                            state = ready.copy(isSearching = true)
-                            true
-                        }
-
-                        KeyEvent("ArrowUp"), KeyEvent("k") -> {
-                            state = ready.moveUp()
-                            true
-                        }
-
-                        KeyEvent("ArrowDown"), KeyEvent("j") -> {
-                            state = ready.moveDown(pageSize)
-                            true
-                        }
-
-                        KeyEvent("Enter") -> {
-                            val displayed = ready.displayedBranches
-                            if (displayed.isNotEmpty()) {
-                                state = AppState.Switching(displayed[ready.selectedItemIndex].name)
-                            }
-                            true
-                        }
-
-                        KeyEvent("?") -> {
-                            showHelp = !showHelp
-                            true
-                        }
-
-                        KeyEvent("Escape") -> {
-                            state = if (ready.searchQuery.isNotEmpty()) {
-                                ready.copy(searchQuery = "", selectedItemIndex = 0, pageStartIndex = 0)
-                            } else {
-                                AppState.Cancelled
-                            }
-                            true
-                        }
-
-                        KeyEvent("q"), KeyEvent("c", ctrl = true) -> {
-                            state = AppState.Cancelled
-                            true
-                        }
-
-                        else -> false
-                    }
+                /*
+                If searchState is Active, we want '?' to register as part of the search query, in contrast to the
+                standard "toggle help" behaviour
+                 */
+                if (readyState.searchState !is SearchState.Active && event == KeyEvent("?")) {
+                    showHelp = !showHelp
+                    return@onKeyEvent true
                 }
+
+                return@onKeyEvent readyState.handleKeyEvent(event, pageSize)?.let { newState ->
+                    state = newState
+                    true
+                } ?: false
             },
     ) {
         when (val appState = state) {

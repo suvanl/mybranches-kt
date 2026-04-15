@@ -21,15 +21,23 @@ sealed interface AppState {
         val selectedItemIndex: Int,
         val pageStartIndex: Int,
         val branchPrefix: String = "",
-        val searchQuery: String = "",
-        val isSearching: Boolean = false,
+        val searchState: SearchState = SearchState.Inactive,
     ) : AppState {
         val displayedBranches: List<Branch>
-            get() = if (searchQuery.isBlank()) {
-                branches
-            } else {
-                branches.filter { branch ->
-                    branch.name.removePrefix(branchPrefix).fuzzyContains(searchQuery)
+            get() {
+                val searchQuery = searchState.query
+                return if (searchQuery.isBlank()) {
+                    branches
+                } else {
+                    branches.filter { branch ->
+                        /*
+                        Since all branches in the list will start with the same pattern (username/ *), it may make
+                        searching slightly easier if we ignore this prefix. However, if we ever support custom branch
+                        name patterns to be supplied, we'll need to review this as it's likely there'll be no
+                        guarantees that the pattern will be some kind of prefix.
+                         */
+                        branch.name.removePrefix(branchPrefix).fuzzyContains(searchQuery)
+                    }
                 }
             }
     }

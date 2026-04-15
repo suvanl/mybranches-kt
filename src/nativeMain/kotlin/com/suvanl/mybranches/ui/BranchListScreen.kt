@@ -17,8 +17,7 @@ fun ColumnScope.BranchListScreen(
         branchPattern = pattern,
         help = "↑/k ↓/j navigate | enter select | / search | q quit",
         showHelp = showHelp,
-        searchQuery = state.searchQuery,
-        isSearching = state.isSearching,
+        searchState = state.searchState,
     )
     BranchList(
         branches = state.displayedBranches,
