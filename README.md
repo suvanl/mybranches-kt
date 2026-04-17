@@ -17,6 +17,10 @@ To build both debug and release executables, use the `<targetName>Binaries` life
 ./gradlew macosArm64Binaries
 ```
 
+> [!NOTE]
+> Building the release executable will be significantly slower than the debug
+> executable ([more info](https://kotlinlang.org/docs/native-improving-compilation-time.html#don-t-build-unnecessary-release-binaries)).
+
 Binary output lives under `build/bin/<targetName>/debugExecutable/` and `releaseExecutable/` when built.
 
 To run the project, execute the `build/bin/<targetName>/debugExecutable/mb.kexe` command for the desired target, e.g.
