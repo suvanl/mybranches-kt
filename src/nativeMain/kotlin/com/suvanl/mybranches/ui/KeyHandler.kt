@@ -15,8 +15,8 @@ private fun AppState.Ready.handleActiveSearchKey(
     pageSize: Int,
 ): AppState? {
     val activeSearch = searchState as SearchState.Active
-    return when {
-        event == KeyEvent(key = "Escape") || event == KeyEvent(key = "Enter") -> {
+    return when (event) {
+        KeyEvent(key = "Escape"), KeyEvent(key = "Enter") -> {
             if (activeSearch.query.isEmpty()) {
                 copy(searchState = SearchState.Inactive)
             } else {
@@ -24,24 +24,25 @@ private fun AppState.Ready.handleActiveSearchKey(
             }
         }
 
-        event == KeyEvent(key = "Backspace") -> {
+        KeyEvent(key = "Backspace") -> {
             val newQuery = activeSearch.query.dropLast(1)
-            val newState = if (newQuery.isEmpty()) SearchState.Active("") else SearchState.Active(newQuery)
-            copy(searchState = newState, selectedItemIndex = 0, pageStartIndex = 0)
-        }
-
-        event == KeyEvent(key = "ArrowUp") -> moveUp()
-
-        event == KeyEvent(key = "ArrowDown") -> moveDown(pageSize)
-
-        event == KeyEvent(ctrl = true, key = "c") -> AppState.Cancelled
-
-        event.key.length == 1 && !event.ctrl && !event.alt -> {
-            val newQuery = activeSearch.query + event.key
             copy(searchState = SearchState.Active(newQuery), selectedItemIndex = 0, pageStartIndex = 0)
         }
 
-        else -> null
+        KeyEvent(key = "ArrowUp") -> moveUp()
+
+        KeyEvent(key = "ArrowDown") -> moveDown(pageSize)
+
+        KeyEvent(ctrl = true, key = "c") -> AppState.Cancelled
+
+        else -> {
+            val isPlainCharacter = event.key.length == 1 && !event.ctrl && !event.alt
+            if (!isPlainCharacter) {
+                return null
+            }
+            val newQuery = activeSearch.query + event.key
+            copy(searchState = SearchState.Active(newQuery), selectedItemIndex = 0, pageStartIndex = 0)
+        }
     }
 }
 
