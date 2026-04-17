@@ -18,8 +18,8 @@ To build both debug and release executables, use the `<targetName>Binaries` life
 ```
 
 > [!NOTE]
-> Building the release executable will be significantly slower than the debug
-> executable ([more info](https://kotlinlang.org/docs/native-improving-compilation-time.html#don-t-build-unnecessary-release-binaries)).
+> Release binaries are highly optimised. As a result, [compilation of release binaries takes an order of magnitude more
+> time than debug binaries](https://kotlinlang.org/docs/native-improving-compilation-time.html#don-t-build-unnecessary-release-binaries).
 
 Binary output lives under `build/bin/<targetName>/debugExecutable/` and `releaseExecutable/` when built.
 
