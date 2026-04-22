@@ -16,7 +16,7 @@ fun runCommand(vararg args: String): CommandRunResult {
     val escaped = args.joinToString(" ") { arg ->
         "'" + arg.replace("'", "'\\''") + "'"
     }
-    val fp = popen("$escaped 2>&1", "r") ?: return CommandRunResult("", false)
+    val fp = popen("$escaped 2>&1", "r") ?: return CommandRunResult(output = "", success = false)
 
     val output = StringBuilder()
     memScoped {
@@ -28,5 +28,8 @@ fun runCommand(vararg args: String): CommandRunResult {
     }
 
     val status = pclose(fp)
-    return CommandRunResult(output.toString().trimEnd(), status == 0)
+    return CommandRunResult(
+        output = output.toString().trimEnd(),
+        success = status == 0,
+    )
 }
