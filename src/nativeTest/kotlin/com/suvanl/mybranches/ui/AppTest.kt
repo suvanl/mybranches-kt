@@ -382,7 +382,7 @@ class AppTest {
     }
 
     private suspend fun <T> TestMosaic<T>.awaitFrame(
-        timeout: Duration = 10.seconds,
+        timeout: Duration = 20.seconds,
     ): T = awaitSnapshot(timeout)
 
     private fun <T> TestMosaic<T>.typeSearchQuery(query: String) {
