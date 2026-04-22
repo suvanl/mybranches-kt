@@ -13,13 +13,14 @@ with [Mosaic](https://github.com/JakeWharton/mosaic) (Compose for terminal).
 ## Build and run
 
 ```sh
-./gradlew macosArm64Binaries          # compile (debug + release)
-./gradlew macosArm64Test              # run tests
+./gradlew macosArm64Binaries  # compile (debug + release)
+./gradlew macosArm64Test  # run tests
+./gradlew macosArm64Test --tests "fully.qualified.ClassName"  # run a specific test
 ```
 
 Binary output: `build/bin/macosArm64/debugExecutable/mb.kexe`
 
-## Writing unit tests
+## Unit tests
 
 Test case names typically start with `should`.
 
