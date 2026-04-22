@@ -6,12 +6,10 @@ import com.jakewharton.mosaic.testing.runMosaicTest
 import com.suvanl.mybranches.git.GitClient
 import com.suvanl.mybranches.system.CommandRunResult
 import com.suvanl.mybranches.system.CommandRunner
-import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withTimeout
 import kotlin.test.Test
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -37,9 +35,11 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
             }
-            val snapshot = awaitSnapshotWhere { "user/feature" in it }
+            awaitFrame() // ... skip loading state
+            val snapshot = awaitFrame()
 
             // Then
+            snapshot shouldContain "user/feature"
             snapshot shouldContain "user/bugfix"
         }
     }
@@ -57,7 +57,8 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = { exitState = it })
             }
-            val snapshot = awaitSnapshotWhere { "No branches matching" in it }
+            awaitFrame() // ... skip loading state
+            val snapshot = awaitFrame()
 
             // Then
             snapshot shouldContain "No branches matching 'user/*'"
@@ -75,15 +76,15 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
             }
-            awaitSnapshotWhere { ">   user/first" in it }
+            awaitFrame() // ... skip Loading state
+            awaitFrame() // ... in Ready state
 
             // When
             sendKeyEvent(arrowDown)
+            val snapshot = awaitFrame()
 
             // Then
-            shouldNotThrow<IllegalStateException> {
-                awaitSnapshotWhere { ">   user/second" in it }
-            }
+            snapshot shouldContain ">   user/second"
         }
     }
 
@@ -102,11 +103,12 @@ class AppTest {
                     onExit = { /* do nothing */ },
                 )
             }
-            awaitSnapshotWhere { "user/feature" in it }
+            awaitFrame() // ... skip Loading state
+            awaitFrame() // ... in Ready state
 
             // When
             sendKeyEvent(enter)
-            val snapshot = awaitSnapshotWhere { "Switching to" in it }
+            val snapshot = awaitFrame()
 
             // Then
             snapshot shouldContain "Switching to user/feature"
@@ -124,11 +126,12 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = { exitState = it })
             }
-            awaitSnapshotWhere { "user/feature" in it }
+            awaitFrame() // ... skip Loading state
+            awaitFrame() // ... in Ready state
 
             // When
             sendKeyEvent(qKey)
-            awaitSnapshot()
+            awaitFrame()
 
             // Then
             exitState shouldBe AppState.Cancelled
@@ -150,7 +153,8 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
             }
-            val snapshot = awaitSnapshotWhere { "user/current" in it }
+            awaitFrame() // ... skip loading state
+            val snapshot = awaitFrame()
 
             // Then
             snapshot shouldContain "> * user/current"
@@ -167,21 +171,25 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
             }
-            val readySnapshot = awaitSnapshotWhere { "(? for help)" in it }
+            awaitFrame() // ... skip Loading state
+            val readySnapshot = awaitFrame()
+            readySnapshot shouldContain "(? for help)"
             readySnapshot shouldNotContain "↑/k ↓/j navigate"
 
             // When toggle help on
             sendKeyEvent(questionMark)
-            val helpShown = awaitSnapshotWhere { "↑/k ↓/j navigate" in it }
+            val helpShown = awaitFrame()
 
             // Then
+            helpShown shouldContain "↑/k ↓/j navigate"
             helpShown shouldNotContain "(? for help)"
 
             // When toggle help off
             sendKeyEvent(questionMark)
-            val helpHidden = awaitSnapshotWhere { "(? for help)" in it }
+            val helpHidden = awaitFrame()
 
             // Then
+            helpHidden shouldContain "(? for help)"
             helpHidden shouldNotContain "↑/k ↓/j navigate"
         }
     }
@@ -196,12 +204,13 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
             }
-            awaitSnapshotWhere { "user/feature" in it }
+            awaitFrame()
+            awaitFrame()
 
             // When
             sendKeyEvent(slash)
             typeSearchQuery("f")
-            val snapshot = awaitSnapshot()
+            val snapshot = awaitFrame()
 
             // Then
             snapshot shouldContain "user/feature"
@@ -220,7 +229,8 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
             }
-            awaitSnapshotWhere { "user/feature" in it }
+            awaitFrame()
+            awaitFrame()
 
             // When
             // ... search for "feat"
@@ -228,7 +238,7 @@ class AppTest {
             typeSearchQuery("feat")
             // ... hit Esc
             sendKeyEvent(escape)
-            val snapshot = awaitSnapshot()
+            val snapshot = awaitFrame()
 
             // Then filter persists
             snapshot shouldContain "user/feature"
@@ -246,7 +256,8 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
             }
-            awaitSnapshotWhere { "user/feature" in it }
+            awaitFrame()
+            awaitFrame()
 
             // When
             // ... search
@@ -254,10 +265,10 @@ class AppTest {
             typeSearchQuery("feat")
             // ... lock filter with Escape
             sendKeyEvent(escape)
-            awaitSnapshot()
+            awaitFrame()
             // ... cancel search filter
             sendKeyEvent(escape)
-            val snapshot = awaitSnapshot()
+            val snapshot = awaitFrame()
 
             // Then full list restored
             snapshot shouldContain "user/feature"
@@ -276,11 +287,12 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = { exitState = it })
             }
-            awaitSnapshotWhere { "user/feature" in it }
+            awaitFrame()
+            awaitFrame()
 
             // When
             sendKeyEvent(escape)
-            awaitSnapshot()
+            awaitFrame()
 
             // Then
             exitState shouldBe AppState.Cancelled
@@ -298,7 +310,8 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = { exitState = it })
             }
-            awaitSnapshotWhere { "user/feature" in it }
+            awaitFrame()
+            awaitFrame()
 
             // When
             // ... enter search mode
@@ -307,7 +320,7 @@ class AppTest {
             typeSearchQuery("bf")
             // ... exit search mode using Enter key (lock filter)
             sendKeyEvent(enter)
-            val snapshot = awaitSnapshot()
+            val snapshot = awaitFrame()
 
             // Then filter persists
             snapshot shouldContain "user/bugfix"
@@ -315,7 +328,7 @@ class AppTest {
 
             // When `q` pressed
             sendKeyEvent(qKey)
-            awaitSnapshot()
+            awaitFrame()
             // Then program quits gracefully
             exitState shouldBe AppState.Cancelled
         }
@@ -332,12 +345,13 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = { exitState = it })
             }
-            awaitSnapshotWhere { "user/feature" in it }
+            awaitFrame()
+            awaitFrame()
 
             // When
             sendKeyEvent(slash)
             sendKeyEvent(qKey)
-            awaitSnapshot()
+            awaitFrame()
 
             // Then
             exitState shouldBe null
@@ -354,34 +368,22 @@ class AppTest {
             setContent {
                 App(gitClient = GitClient(runner), branchNamePattern = "user/*", onExit = {})
             }
-            awaitSnapshotWhere { "user/feature" in it }
+            awaitFrame()
+            awaitFrame()
 
             // When
             sendKeyEvent(slash)
             typeSearchQuery("zzz")
-            val snapshot = awaitSnapshot()
+            val snapshot = awaitFrame()
 
             // Then
             snapshot shouldContain "No matching branches"
         }
     }
 
-    private suspend fun <T : CharSequence> TestMosaic<T>.awaitSnapshotWhere(
+    private suspend fun <T> TestMosaic<T>.awaitFrame(
         timeout: Duration = 10.seconds,
-        predicate: (T) -> Boolean,
-    ): T {
-        var result: T? = null
-        withTimeout(timeout) {
-            while (true) {
-                val snapshot = awaitSnapshot()
-                if (predicate(snapshot)) {
-                    result = snapshot
-                    break
-                }
-            }
-        }
-        return result ?: error("no result")
-    }
+    ): T = awaitSnapshot(timeout)
 
     private fun <T> TestMosaic<T>.typeSearchQuery(query: String) {
         query.forEach { char ->
