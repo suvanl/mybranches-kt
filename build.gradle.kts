@@ -12,6 +12,29 @@ repositories {
     google()
 }
 
+val generateBuildConfig by tasks.registering {
+    val outputDir = layout.buildDirectory.dir("generated/buildconfig")
+    val gitVersion: Provider<String> = providers.exec {
+        commandLine("git", "describe", "--tags", "--always")
+    }.standardOutput.asText.map { it.trim() }
+
+    outputs.dir(outputDir)
+    inputs.property("version", gitVersion)
+
+    doLast {
+        outputDir.get().file("BuildConfig.kt").asFile.writeText(
+            """
+            package com.suvanl.mybranches
+
+            object BuildConfig {
+                const val VERSION = "${gitVersion.get()}"
+            }
+
+            """.trimIndent(),
+        )
+    }
+}
+
 kotlin {
     macosArm64()
 
@@ -26,6 +49,7 @@ kotlin {
 
     sourceSets {
         nativeMain {
+            kotlin.srcDir(generateBuildConfig)
             dependencies {
                 implementation("com.jakewharton.mosaic:mosaic-runtime:0.18.0")
             }

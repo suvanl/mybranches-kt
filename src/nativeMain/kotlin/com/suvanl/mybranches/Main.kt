@@ -7,7 +7,12 @@ import com.suvanl.mybranches.ui.App
 import com.suvanl.mybranches.ui.AppState
 import kotlin.system.exitProcess
 
-fun main() {
+fun main(args: Array<String>) {
+    if (args.any { it == "--version" || it == "-v" }) {
+        println(BuildConfig.VERSION)
+        return
+    }
+
     val username = try {
         currentUsername()
     } catch (e: IllegalStateException) {
