@@ -1,5 +1,30 @@
 # mybranches-kt
 
+## Installation
+
+> [!NOTE]
+> Currently only macOS (Apple Silicon) is supported.
+
+### Download the latest release
+
+```shell
+curl -fSL https://github.com/suvanl/mybranches-kt/releases/latest/download/mb-macos-arm64.tar.gz | tar xz
+mv mb /usr/local/bin/  # or another directory on your PATH
+```
+
+### Download a specific release
+
+```shell
+curl -fSL https://github.com/suvanl/mybranches-kt/releases/download/v<VERSION>/mb-macos-arm64.tar.gz | tar xz
+mv mb /usr/local/bin/  # or another directory on your PATH
+```
+
+Alternatively, download the binary from the [Releases](https://github.com/suvanl/mybranches-kt/releases) page.
+
+### Build from source
+
+See the [Development](#development) section.
+
 ## Development
 
 ### Build and run the project
