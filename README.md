@@ -8,15 +8,15 @@
 ### Download the latest release
 
 ```shell
-curl -fSL https://github.com/suvanl/mybranches-kt/releases/latest/download/mb-macos-arm64.tar.gz | tar xz
-mv mb /usr/local/bin/  # or another directory on your PATH
+curl -fsSL https://github.com/suvanl/mybranches-kt/releases/latest/download/mb-macos-arm64.tar.gz | tar xz
+sudo mv mb /usr/local/bin/  # or another directory on your PATH
 ```
 
 ### Download a specific release
 
 ```shell
-curl -fSL https://github.com/suvanl/mybranches-kt/releases/download/v<VERSION>/mb-macos-arm64.tar.gz | tar xz
-mv mb /usr/local/bin/  # or another directory on your PATH
+curl -fsSL https://github.com/suvanl/mybranches-kt/releases/download/v<VERSION>/mb-macos-arm64.tar.gz | tar xz
+sudo mv mb /usr/local/bin/  # or another directory on your PATH
 ```
 
 Alternatively, download the binary from the [Releases](https://github.com/suvanl/mybranches-kt/releases) page.
