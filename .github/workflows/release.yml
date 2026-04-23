@@ -40,11 +40,9 @@ jobs:
         run: ./gradlew linkReleaseExecutableMacosArm64
 
       - name: Package binary
-        env:
-          TAG: ${{ github.ref_name }}
         run: |
           cp build/bin/macosArm64/releaseExecutable/mb.kexe mb
-          tar -czf "mb-macos-arm64-${TAG}.tar.gz" mb
+          tar -czf mb-macos-arm64.tar.gz mb
 
       - name: Create release
         env:
@@ -52,6 +50,6 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: >
           gh release create "$TAG"
-          "mb-macos-arm64-${TAG}.tar.gz"
+          mb-macos-arm64.tar.gz
           --title "$TAG"
           --generate-notes
