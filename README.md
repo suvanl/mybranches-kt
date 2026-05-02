@@ -1,5 +1,7 @@
 # mybranches-kt
 
+![demo](demo.gif)
+
 ## Installation
 
 > [!NOTE]
@@ -38,6 +40,18 @@ Alternatively, download the binary from the [Releases](https://github.com/suvanl
 ### Build from source
 
 See the [Development](#development) section.
+
+## Usage
+
+1. Run `mb` within a git repo
+2. Select the desired branch (using <kbd>↑</kbd><kbd>↓</kbd> or <kbd>k</kbd><kbd>j</kbd>)
+3. Hit <kbd>⏎ Enter</kbd> to switch to it
+
+### Searching
+
+It's possible to fuzzy search the list, by pressing <kbd>/</kbd> and entering your search query. To lock the filter
+(e.g. to allow for navigation within the subset with <kbd>k</kbd> and <kbd>j</kbd>), hit <kbd>⏎ Enter</kbd>. 
+To exit search, hit <kbd>Esc</kbd>.
 
 ## Development
 
