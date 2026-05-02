@@ -1,5 +1,7 @@
 # mybranches-kt
 
+🌳 Interactive local branch explorer with fuzzy search
+
 ![demo](demo.gif)
 
 ## Installation
