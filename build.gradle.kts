@@ -36,7 +36,7 @@ val generateBuildConfig by tasks.registering {
 }
 
 kotlin {
-    linuxArm64()
+    linuxX64()
     macosArm64()
 
     targets.withType<KotlinNativeTarget>().configureEach {

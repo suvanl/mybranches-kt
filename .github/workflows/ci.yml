@@ -16,9 +16,9 @@ jobs:
           - target: macosArm64
             runner: macos-26
             task: linkReleaseExecutableMacosArm64
-          - target: linuxArm64
-            runner: ubuntu-24.04-arm
-            task: linkReleaseExecutableLinuxArm64
+          - target: linuxX64
+            runner: ubuntu-24.04
+            task: linkReleaseExecutableLinuxX64
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
@@ -58,9 +58,9 @@ jobs:
           - target: macosArm64
             runner: macos-26
             task: macosArm64Test
-          - target: linuxArm64
-            runner: ubuntu-24.04-arm
-            task: linuxArm64Test
+          - target: linuxX64
+            runner: ubuntu-24.04
+            task: linuxX64Test
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
