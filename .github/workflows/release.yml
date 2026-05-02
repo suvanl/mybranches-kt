@@ -36,13 +36,15 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e
 
-      - name: Build release executable
-        run: ./gradlew linkReleaseExecutableMacosArm64
+      - name: Build release executables
+        run: ./gradlew linkReleaseExecutableMacosArm64 linkReleaseExecutableLinuxX64
 
-      - name: Package binary
+      - name: Package binaries
         run: |
           cp build/bin/macosArm64/releaseExecutable/mb.kexe mb
           tar -czf mb-macos-arm64.tar.gz mb
+          cp build/bin/linuxX64/releaseExecutable/mb.kexe mb
+          tar -czf mb-linux-x64.tar.gz mb
 
       - name: Create release
         env:
@@ -51,5 +53,6 @@ jobs:
         run: >
           gh release create "$TAG"
           mb-macos-arm64.tar.gz
+          mb-linux-x64.tar.gz
           --title "$TAG"
           --generate-notes
