@@ -8,8 +8,17 @@ on:
 
 jobs:
   build:
-    name: Build
-    runs-on: macos-26
+    name: Build (${{ matrix.target }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - target: macosArm64
+            runner: macos-26
+            task: linkReleaseExecutableMacosArm64
+          - target: linuxArm64
+            runner: ubuntu-24.04-arm
+            task: linkReleaseExecutableLinuxArm64
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
@@ -21,7 +30,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e
 
       - name: Build release executable
-        run: ./gradlew linkReleaseExecutableMacosArm64
+        run: ./gradlew ${{ matrix.task }}
 
   lint:
     name: Lint (ktlint)
@@ -40,9 +49,18 @@ jobs:
         run: ./gradlew ktlintCheck
 
   unit-test:
-    name: Unit test
+    name: Unit test (${{ matrix.target }})
     needs: build
-    runs-on: macos-26
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - target: macosArm64
+            runner: macos-26
+            task: macosArm64Test
+          - target: linuxArm64
+            runner: ubuntu-24.04-arm
+            task: linuxArm64Test
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
@@ -54,4 +72,4 @@ jobs:
       - uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e
 
       - name: Run tests
-        run: ./gradlew macosArm64Test
+        run: ./gradlew ${{ matrix.task }}
