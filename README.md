@@ -3,20 +3,34 @@
 ## Installation
 
 > [!NOTE]
-> Currently only macOS (Apple Silicon) is supported.
+> Currently only macOS (Apple Silicon) and Linux (x86_64) are supported.
 
 ### Download the latest release
 
+#### macOS
 ```shell
 curl -fsSL https://github.com/suvanl/mybranches-kt/releases/latest/download/mb-macos-arm64.tar.gz | tar xz
-sudo mv mb /usr/local/bin/  # or another directory on your PATH
+sudo mv mb /usr/local/bin/
+```
+
+#### Linux
+```shell
+curl -fsSL https://github.com/suvanl/mybranches-kt/releases/latest/download/mb-linux-x64.tar.gz | tar xz
+sudo mv mb /usr/local/bin/
 ```
 
 ### Download a specific release
 
+#### macOS
 ```shell
 curl -fsSL https://github.com/suvanl/mybranches-kt/releases/download/v<VERSION>/mb-macos-arm64.tar.gz | tar xz
-sudo mv mb /usr/local/bin/  # or another directory on your PATH
+sudo mv mb /usr/local/bin/
+```
+
+#### Linux
+```shell
+curl -fsSL https://github.com/suvanl/mybranches-kt/releases/download/v<VERSION>/mb-linux-x64.tar.gz | tar xz
+sudo mv mb /usr/local/bin/
 ```
 
 Alternatively, download the binary from the [Releases](https://github.com/suvanl/mybranches-kt/releases) page.
