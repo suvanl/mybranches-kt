@@ -45,6 +45,10 @@ See the [Development](#development) section.
 
 ## Usage
 
+`mb` lists local branches matching `$USER/*` (i.e. branches prefixed with your system username).
+
+### Basic operation
+
 1. Run `mb` within a git repo
 2. Select the desired branch (using <kbd>↑</kbd><kbd>↓</kbd> or <kbd>k</kbd><kbd>j</kbd>)
 3. Hit <kbd>⏎ Enter</kbd> to switch to it
