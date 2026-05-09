@@ -41,7 +41,32 @@ Alternatively, download the binary from the [Releases](https://github.com/suvanl
 
 ### Build from source
 
-See the [Development](#development) section.
+After cloning the repo and `cd`ing into it, compile the program:
+
+```shell
+# macOS:
+./gradlew linkReleaseExecutableMacosArm64
+
+# or Linux:
+./gradlew linkReleaseExecutableLinuxX64
+```
+
+#### Optional: rename binary and add to PATH
+
+To be able to execute the program using `mb`:
+
+1. Rename the binary:
+    ```shell
+    # macOS:
+    cp build/bin/macosArm64/releaseExecutable/mb.kexe mb
+    
+    # or Linux:
+    cp build/bin/linuxX64/releaseExecutable/mb.kexe mb
+    ```
+2. Move the binary:
+    ```shell
+    mv mb /usr/local/bin  # or elsewhere on PATH
+    ```
 
 ## Usage
 
@@ -60,6 +85,12 @@ It's possible to fuzzy search the list, by pressing <kbd>/</kbd> and entering yo
 To exit search, hit <kbd>Esc</kbd>.
 
 ## Development
+
+This is a Kotlin/Native project which compiles down to a platform-native binary. The currently
+supported [targets](https://kotlinlang.org/docs/native-target-support.html) are:
+
+- linuxX64
+- macosArm64
 
 ### Build and run the project
 
