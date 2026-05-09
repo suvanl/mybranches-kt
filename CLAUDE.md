@@ -1,7 +1,7 @@
 # mybranches-kt
 
-`mb` is a Kotlin/Native (`macosArm64`) CLI tool. It lists local git branches matching `$USER/*`, lets the user select
-one through an interactive TUI, and runs `git switch`. The TUI is built
+`mb` is a Kotlin/Native (`macosArm64`, `linuxX64`) CLI tool. It lists local git branches matching `$USER/*`, lets the
+user select one through an interactive TUI, and runs `git switch`. The TUI is built
 with [Mosaic](https://github.com/JakeWharton/mosaic) (Compose for terminal).
 
 ## Useful resources
