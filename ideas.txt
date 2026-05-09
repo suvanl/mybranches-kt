@@ -14,12 +14,6 @@ future ideas/enhancements:
 - extract a default reusable CommandRunner impl (e.g. DefaultCommandRunner) for non-test usage
     - if we ever need it anywhere outside of GitClient
 
-- improve compilation time:
-    - see https://kotlinlang.org/docs/native-improving-compilation-time.html
-    - if all else fails... try customising LLVM: https://kotlinlang.org/docs/native-llvm-passes.html
-
 - colours/theme: support both light and dark theme terminals
     -> use `LocalTerminalState.current.theme` to get current theme
         -> seems to always report Unknown though... (tried Terminal.app, iTerm2, Ghostty)
-
-- show current branch in a different color (i.e. git does it in green) in addition to `*` indicator
