@@ -68,6 +68,10 @@ To be able to execute the program using `mb`:
     mv mb /usr/local/bin  # or elsewhere on PATH
     ```
 
+### Updating
+
+Follow the same steps as installing. `mv` will overwrite the existing binary in place.
+
 ## Usage
 
 `mb` lists local branches matching `$USER/*` (i.e. branches prefixed with your system username).
