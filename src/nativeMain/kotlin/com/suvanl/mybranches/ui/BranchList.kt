@@ -2,9 +2,14 @@ package com.suvanl.mybranches.ui
 
 import androidx.compose.runtime.Composable
 import com.jakewharton.mosaic.modifier.Modifier
+import com.jakewharton.mosaic.text.SpanStyle
+import com.jakewharton.mosaic.text.buildAnnotatedString
+import com.jakewharton.mosaic.text.withStyle
+import com.jakewharton.mosaic.ui.Color
 import com.jakewharton.mosaic.ui.Column
 import com.jakewharton.mosaic.ui.Text
 import com.suvanl.mybranches.git.Branch
+import com.suvanl.mybranches.ui.theme.ThemeColor
 
 @Composable
 fun BranchList(
@@ -24,8 +29,18 @@ fun BranchList(
             for ((offset, branch) in visibleBranches.withIndex()) {
                 val index = pageStart + offset
                 val cursor = if (index == selected) ">" else " "
+
                 val currentMarker = if (branch.isCurrent) "* " else "  "
-                Text("$cursor $currentMarker${branch.name}")
+                val branchNameColor = if (branch.isCurrent) ThemeColor.primaryDark else Color.Unspecified
+
+                val lineContent = buildAnnotatedString {
+                    append("$cursor $currentMarker")
+                    withStyle(SpanStyle(color = branchNameColor)) {
+                        append(branch.name)
+                    }
+                }
+
+                Text(lineContent)
             }
 
             if (branches.size > pageSize) {
