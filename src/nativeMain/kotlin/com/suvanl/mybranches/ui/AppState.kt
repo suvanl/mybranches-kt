@@ -1,6 +1,7 @@
 package com.suvanl.mybranches.ui
 
 import com.suvanl.mybranches.git.Branch
+import com.suvanl.mybranches.search.fuzzyContains
 
 sealed interface AppState {
     /**

@@ -1,4 +1,4 @@
-package com.suvanl.mybranches.ui
+package com.suvanl.mybranches.search
 
 import io.kotest.matchers.shouldBe
 import kotlin.test.Test
