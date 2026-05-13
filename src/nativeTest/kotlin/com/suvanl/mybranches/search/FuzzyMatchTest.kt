@@ -70,4 +70,40 @@ class FuzzyMatchTest {
         // When / Then
         "".fuzzyContains("a") shouldBe false
     }
+
+    @Test
+    fun shouldMatchCaseSensitivelyWhenQueryHasUppercase() {
+        // Given
+        val text = "user/ABC-1223-hello/WorldNextTest"
+
+        // When / Then
+        text.fuzzyContains("ABC1WorldNeTes") shouldBe true
+    }
+
+    @Test
+    fun shouldFailCaseSensitiveMatchWhenQueryIsMixedCase() {
+        // Given
+        val text = "user/ABC-1223-hello/world"
+
+        // When the query does contain part of the text, but the casing doesn't line up / Then
+        text.fuzzyContains("Abc1") shouldBe false
+    }
+
+    @Test
+    fun shouldNotMatchUppercaseQueryAgainstLowercaseText() {
+        // Given the text is all lowercase
+        val text = "feature/foobar"
+
+        // When the search query contains uppercase chars / Then
+        text.fuzzyContains("FOO") shouldBe false
+    }
+
+    @Test
+    fun shouldMatchLowercaseQueryAgainstUppercaseText() {
+        // Given
+        val text = "feature/FOOBAR"
+
+        // When / Then
+        text.fuzzyContains("foo") shouldBe true
+    }
 }
