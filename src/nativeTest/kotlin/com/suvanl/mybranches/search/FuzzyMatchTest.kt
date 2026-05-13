@@ -10,8 +10,11 @@ class FuzzyMatchTest {
         // Given
         val text = "feature/bugfix"
 
-        // When / Then
-        text.fuzzyContains("bug") shouldBe true
+        // When
+        val result = text.fuzzyContains("bug")
+
+        // Then
+        result shouldBe true
     }
 
     @Test
@@ -19,8 +22,11 @@ class FuzzyMatchTest {
         // Given
         val text = "feature/bugfix"
 
-        // When / Then
-        text.fuzzyContains("fb") shouldBe true
+        // When
+        val result = text.fuzzyContains("fb")
+
+        // Then
+        result shouldBe true
     }
 
     @Test
@@ -28,8 +34,11 @@ class FuzzyMatchTest {
         // Given
         val text = "JIRA-123/fix-thing"
 
-        // When / Then
-        text.fuzzyContains("jira") shouldBe true
+        // When
+        val result = text.fuzzyContains("jira")
+
+        // Then
+        result shouldBe true
     }
 
     @Test
@@ -37,8 +46,11 @@ class FuzzyMatchTest {
         // Given
         val text = "anything"
 
-        // When / Then
-        text.fuzzyContains("") shouldBe true
+        // When
+        val result = text.fuzzyContains("")
+
+        // Then
+        result shouldBe true
     }
 
     @Test
@@ -46,8 +58,11 @@ class FuzzyMatchTest {
         // Given
         val text = "abc"
 
-        // When / Then
-        text.fuzzyContains("ba") shouldBe false
+        // When
+        val result = text.fuzzyContains("ba")
+
+        // Then
+        result shouldBe false
     }
 
     @Test
@@ -55,19 +70,82 @@ class FuzzyMatchTest {
         // Given
         val text = "main"
 
-        // When / Then
-        text.fuzzyContains("mainx") shouldBe false
+        // When
+        val result = text.fuzzyContains("mainx")
+
+        // Then
+        result shouldBe false
     }
 
     @Test
     fun shouldMatchEmptyQueryAgainstEmptyText() {
-        // When / Then
-        "".fuzzyContains("") shouldBe true
+        // Given
+        val text = ""
+
+        // When
+        val result = text.fuzzyContains("")
+
+        // Then
+        result shouldBe true
     }
 
     @Test
     fun shouldNotMatchNonEmptyQueryAgainstEmptyText() {
-        // When / Then
-        "".fuzzyContains("a") shouldBe false
+        // Given
+        val text = ""
+
+        // When
+        val result = text.fuzzyContains("a")
+
+        // Then
+        result shouldBe false
+    }
+
+    @Test
+    fun shouldMatchCaseSensitivelyWhenQueryHasUppercase() {
+        // Given
+        val text = "user/ABC-1223-hello/WorldNextTest"
+
+        // When
+        val result = text.fuzzyContains("ABC1WorldNeTes")
+
+        // Then
+        result shouldBe true
+    }
+
+    @Test
+    fun shouldFailCaseSensitiveMatchWhenQueryIsMixedCase() {
+        // Given
+        val text = "user/ABC-1223-hello/world"
+
+        // When the query does contain part of the text, but the casing doesn't line up
+        val result = text.fuzzyContains("Abc1")
+
+        // Then
+        result shouldBe false
+    }
+
+    @Test
+    fun shouldNotMatchUppercaseQueryAgainstLowercaseText() {
+        // Given the text is all lowercase
+        val text = "user/feature/foobar"
+
+        // When the search query contains uppercase chars
+        val result = text.fuzzyContains("FOO")
+
+        // Then
+        result shouldBe false
+    }
+
+    @Test
+    fun shouldMatchLowercaseQueryAgainstUppercaseText() {
+        // Given
+        val text = "user/feature/FOOBAR"
+
+        // When
+        val result = text.fuzzyContains("foo")
+
+        // Then
+        result shouldBe true
     }
 }
