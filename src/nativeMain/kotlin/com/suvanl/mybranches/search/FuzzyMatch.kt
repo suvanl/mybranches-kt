@@ -1,4 +1,4 @@
-package com.suvanl.mybranches.ui
+package com.suvanl.mybranches.search
 
 internal fun String.fuzzyContains(query: String): Boolean {
     var queryIndex = 0
