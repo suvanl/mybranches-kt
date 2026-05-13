@@ -9,6 +9,7 @@ import com.jakewharton.mosaic.ui.Color
 import com.jakewharton.mosaic.ui.Column
 import com.jakewharton.mosaic.ui.Text
 import com.suvanl.mybranches.git.Branch
+import com.suvanl.mybranches.ui.theme.ThemeColor
 
 @Composable
 fun BranchList(
@@ -30,7 +31,7 @@ fun BranchList(
                 val cursor = if (index == selected) ">" else " "
 
                 val currentMarker = if (branch.isCurrent) "* " else "  "
-                val branchNameColor = if (branch.isCurrent) Color.Green else Color.Unspecified
+                val branchNameColor = if (branch.isCurrent) ThemeColor.primaryDark else Color.Unspecified
 
                 val lineContent = buildAnnotatedString {
                     append("$cursor $currentMarker")
